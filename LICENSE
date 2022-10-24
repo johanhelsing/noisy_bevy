@@ -1,0 +1,5 @@
+bevy_simple_noise is licensed under
+
+* MIT License (./LICENSE-MIT or http://opensource.org/licenses/MIT)
+
+The original noise source is MIT-only, however all changes made by me or PRs to this repo are also available under Apache-2.0.
