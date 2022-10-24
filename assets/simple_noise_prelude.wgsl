@@ -94,15 +94,15 @@ fn simplex_noise_3d(v: vec3<f32>) -> f32 {
     let y = y_ * ns.x + ns.yyyy;
     let h = 1. - abs(x) - abs(y);
 
-    let b0 = vec4( x.xy, y.xy );
-    let b1 = vec4( x.zw, y.zw );
+    let b0 = vec4(x.xy, y.xy);
+    let b1 = vec4(x.zw, y.zw);
 
     let s0 = floor(b0) * 2. + 1.;
     let s1 = floor(b1) * 2. + 1.;
     let sh = -step(h, vec4(0.));
 
-    let a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
-    let a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+    let a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+    let a1 = b1.xzyw + s1.xzyw * sh.zzww;
 
     var p0 = vec3(a0.xy, h.x);
     var p1 = vec3(a0.zw, h.y);
