@@ -19,6 +19,7 @@ Implemented:
 
 todo:
 
+- seeded versions (extra permute step)
 - `fbm_2d`
 - `fbm_3d`
 - maybe others, I want to keep the scope and complexity down, though
