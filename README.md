@@ -16,12 +16,13 @@ Main motivations are:
 
 Implemented:
 
-- `simplex_2d`
-- `simplex_3d` (not tested)
+- `simplex_noise_2d`
+- `simplex_noise_2d_seeded`
+- `simplex_noise_3d`
 
 todo:
 
-- seeded versions (extra permute step)
+- seeded version of 3d simplex noise
 - `fbm_2d`
 - `fbm_3d`
 - maybe others, I want to keep the scope and complexity down, though
