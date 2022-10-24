@@ -12,6 +12,8 @@ Main motivations are:
 - ergonomic usage with Bevy
 - same results on rust and wgsl (not bit-level perfect, though)
 
+![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
+
 Implemented:
 
 - `simplex_2d`
