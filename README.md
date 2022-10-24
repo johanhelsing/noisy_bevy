@@ -40,7 +40,7 @@ wgsl: Just add the plugin to the app:
 
 ```rust ignore
 App::new()
-    .add_plugin(ShaderNoisePlugin)
+    .add_plugin(NoisyShaderPlugin)
 ```
 
 And use it in your shaders, with the same API as on the CPU-side:
