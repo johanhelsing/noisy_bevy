@@ -5,11 +5,11 @@
 <!-- [![crates.io](https://img.shields.io/crates/d/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy) -->
 <!-- [![docs.rs](https://img.shields.io/docsrs/noisy_bevy)](https://docs.rs/noisy_bevy) -->
 
-Simple stupid noise primitives for glam types (Vec2, Vec3) and wgsl.
+Simple stupid noise primitives for glam types (`Vec2`, `Vec3`) and wgsl.
 
 Main motivations are:
 
-- ergonomic usage with bevy 
+- ergonomic usage with Bevy
 - same results on rust and wgsl (not bit-level perfect, though)
 
 Implemented:
@@ -36,7 +36,7 @@ let p = Vec2::new(12.3, 45.6);
 let value = simplex_noise_2d(p);
 ```
 
-Wgsl: Just add the plugin to the app:
+wgsl: Just add the plugin to the app:
 
 ```rust ignore
 App::new()
@@ -50,7 +50,7 @@ And use it in your shaders, with the same API as on the CPU-side:
 
 // ...
 
-let p = vec2<f32>(12.3, 45.6);
+let p = vec2(12.3, 45.6);
 let value = simplex_noise_2d(p);
 ```
 
