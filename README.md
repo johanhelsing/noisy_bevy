@@ -1,7 +1,7 @@
 # noisy_bevy
 
 <!-- [![crates.io](https://img.shields.io/crates/v/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy) -->
-![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)
+![MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 <!-- [![crates.io](https://img.shields.io/crates/d/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy) -->
 <!-- [![docs.rs](https://img.shields.io/docsrs/noisy_bevy)](https://docs.rs/noisy_bevy) -->
 
