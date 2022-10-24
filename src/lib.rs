@@ -14,9 +14,9 @@ use bevy::{
 /// ```wgsl
 /// #import noisy_bevy::prelude
 /// ```
-pub struct ShaderNoisePlugin;
+pub struct NoisyShaderPlugin;
 
-impl Plugin for ShaderNoisePlugin {
+impl Plugin for NoisyShaderPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(load_shaders);
     }

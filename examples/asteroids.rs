@@ -8,7 +8,7 @@ use bevy::{
 };
 use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
-use noisy_bevy::{simplex_2d, ShaderNoisePlugin};
+use noisy_bevy::{simplex_2d, NoisyShaderPlugin};
 
 fn main() {
     App::new()
@@ -19,7 +19,7 @@ fn main() {
         })
         .insert_resource(ClearColor(Color::BLACK))
         .add_plugins(DefaultPlugins)
-        .add_plugin(ShaderNoisePlugin)
+        .add_plugin(NoisyShaderPlugin)
         .add_plugin(PanCamPlugin::default())
         .add_plugin(Material2dPlugin::<AsteroidBackgroundMaterial>::default())
         .add_plugin(WorldInspectorPlugin::default())
