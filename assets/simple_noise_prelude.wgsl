@@ -15,7 +15,7 @@ fn simplex_noise_2d(v: vec2<f32>) -> f32 {
     );
     var i = floor(v + dot(v, C.yy));
     let x0 = v - i + dot(i, C.xx);
-    var i1 = select(vec2(0., 1.), vec2(1., 0.), (x0.x > x0.y));
+    var i1 = select(vec2(0., 1.), vec2(1., 0.), x0.x > x0.y);
     var x12 = x0.xyxy + C.xxzz - vec4(i1, 0., 0.);
     i = i % vec2(289.);
     let p = permute3(permute3(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
