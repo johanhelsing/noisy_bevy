@@ -1,6 +1,6 @@
 #import bevy_pbr::mesh_view_bindings
 #import bevy_pbr::utils
-#import bevy_simple_noise::prelude
+#import noisy_bevy::prelude
 // #import bevy_pbr::mesh_functions
 #import bevy_sprite::mesh2d_bindings
 

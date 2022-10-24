@@ -1,9 +1,9 @@
-# bevy_simple_noise
+# noisy_bevy
 
-<!-- [![crates.io](https://img.shields.io/crates/v/bevy_simple_noise.svg)](https://crates.io/crates/bevy_simple_noise) -->
+<!-- [![crates.io](https://img.shields.io/crates/v/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy) -->
 ![MIT/Apache 2.0](https://img.shields.io/badge/license-MIT%2FApache-blue.svg)
-<!-- [![crates.io](https://img.shields.io/crates/d/bevy_simple_noise.svg)](https://crates.io/crates/bevy_simple_noise) -->
-<!-- [![docs.rs](https://img.shields.io/docsrs/bevy_simple_noise)](https://docs.rs/bevy_simple_noise) -->
+<!-- [![crates.io](https://img.shields.io/crates/d/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy) -->
+<!-- [![docs.rs](https://img.shields.io/docsrs/noisy_bevy)](https://docs.rs/noisy_bevy) -->
 
 Simple stupid noise primitives for glam types (Vec2, Vec3) and wgsl.
 
@@ -29,7 +29,7 @@ Rust: Zero initialization, just call the noise functions:
 
 ```rust
 use bevy::prelude::*;
-use bevy_simple_noise::simplex_noise_2d;
+use noisy_bevy::simplex_noise_2d;
 
 let p = Vec2::new(12.3, 45.6);
 let value = simplex_noise_2d(p);
@@ -45,7 +45,7 @@ App::new()
 And use it in your shaders, with the same API as on the CPU-side:
 
 ```wgsl
-#import bevy_simple_noise::prelude
+#import noisy_bevy::prelude
 
 // ...
 

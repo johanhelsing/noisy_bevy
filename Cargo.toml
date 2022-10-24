@@ -5,8 +5,8 @@ description = "Procedural noise primitives for bevy"
 edition = "2021"
 keywords = ["gamedev", "bevy", "noise", "pcg"]
 license = "MIT"
-name = "bevy_simple_noise"
-repository = "https://github.com/johanhelsing/bevy_simple_noise"
+name = "noisy_bevy"
+repository = "https://github.com/johanhelsing/noisy_bevy"
 version = "0.1.0"
 
 [dependencies]

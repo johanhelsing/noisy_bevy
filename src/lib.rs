@@ -12,7 +12,7 @@ use bevy::{
 /// General functionality can be included through:
 ///
 /// ```wgsl
-/// #import bevy_simple_noise::prelude
+/// #import noisy_bevy::prelude
 /// ```
 pub struct ShaderNoisePlugin;
 
