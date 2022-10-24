@@ -75,11 +75,11 @@ pub fn simplex_2d(v: Vec2) -> f32 {
 }
 
 fn permute_4(x: Vec4) -> Vec4 {
-    return ((x * 34. + 1.) * x) % Vec4::splat(289.);
+    ((x * 34. + 1.) * x) % Vec4::splat(289.)
 }
 
 fn taylor_inv_sqrt_4(r: Vec4) -> Vec4 {
-    return 1.79284291400159 - 0.85373472095314 * r;
+    1.79284291400159 - 0.85373472095314 * r
 }
 
 #[inline]

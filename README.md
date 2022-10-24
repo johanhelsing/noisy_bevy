@@ -15,10 +15,10 @@ Main motivations are:
 Implemented:
 
 - `simplex_2d`
+- `simplex_3d` (not tested)
 
 todo:
 
-- `simplex_3d`
 - `fbm_2d`
 - `fbm_3d`
 - maybe others, I want to keep the scope and complexity down, though
