@@ -50,7 +50,7 @@ fn permute_4(x: vec4<f32>) -> vec4<f32> {
     return ((x * 34. + 1.) * x) % vec4<f32>(289.);
 }
 
-fn taylorInvSqrt4(r: vec4<f32>) -> vec4<f32> {
+fn taylor_inv_sqrt_4(r: vec4<f32>) -> vec4<f32> {
     return 1.79284291400159 - 0.85373472095314 * r;
 }
 
@@ -110,7 +110,7 @@ fn simplex_noise_3d(v: vec3<f32>) -> f32 {
     var p3 = vec3(a1.zw, h.w);
 
     // normalize gradients
-    let norm = taylorInvSqrt4(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
+    let norm = taylor_inv_sqrt_4(vec4(dot(p0,p0), dot(p1,p1), dot(p2,p2), dot(p3,p3)));
     p0 = p0 * norm.x;
     p1 = p1 * norm.y;
     p2 = p2 * norm.z;
