@@ -2,7 +2,7 @@
 
 #define_import_path noisy_bevy::prelude
 
-fn permute3(x: vec3<f32>) -> vec3<f32> {
+fn permute_3(x: vec3<f32>) -> vec3<f32> {
     return (((x * 34.) + 1.) * x) % vec3(289.);
 }
 
@@ -18,7 +18,7 @@ fn simplex_noise_2d(v: vec2<f32>) -> f32 {
     var i1 = select(vec2(0., 1.), vec2(1., 0.), x0.x > x0.y);
     var x12 = x0.xyxy + C.xxzz - vec4(i1, 0., 0.);
     i = i % vec2(289.);
-    let p = permute3(permute3(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
+    let p = permute_3(permute_3(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
     var m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), vec3(0.));
     m *= m;
     m *= m;
