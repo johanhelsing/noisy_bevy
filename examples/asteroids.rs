@@ -8,7 +8,7 @@ use bevy::{
 };
 use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
-use noisy_bevy::{simplex_2d, NoisyShaderPlugin};
+use noisy_bevy::{simplex_noise_2d_seeded, NoisyShaderPlugin};
 
 fn main() {
     App::new()
@@ -56,6 +56,7 @@ struct AsteroidParams {
     frequency_scale: f32,
     amplitude_scale: f32,
     radius: f32,
+    seed: u32,
 }
 
 impl Default for AsteroidParams {
@@ -64,6 +65,7 @@ impl Default for AsteroidParams {
             frequency_scale: 0.1,
             amplitude_scale: 2.8,
             radius: 14.0,
+            seed: 0,
         }
     }
 }
@@ -99,9 +101,6 @@ fn expand_asteroids(
     mut meshes: ResMut<Assets<Mesh>>,
     mut asteroid_materials: ResMut<Assets<AsteroidBackgroundMaterial>>,
 ) {
-    // todo: bevy_asset_loader
-    // let asteroid_sdf = asset_server.load("asteroid_sdf.wgsl");
-
     for (asteroid_entity, params) in changed_asteroids.iter() {
         let max_half_size = params.radius as i32 + 1;
 
@@ -110,7 +109,10 @@ fn expand_asteroids(
             for x in -max_half_size..=max_half_size {
                 for y in -max_half_size..=max_half_size {
                     let p = vec2(x as f32, y as f32);
-                    let o = simplex_2d(p * params.frequency_scale) * params.amplitude_scale;
+                    let o = simplex_noise_2d_seeded(p * params.frequency_scale, params.seed as f32)
+                        * params.amplitude_scale;
+                    // let o = noisy_bevy::fbm_simplex_2d(p * params.frequency_scale, 3, 2., 0.5)
+                    //     * params.amplitude_scale;
                     if ((x * x + y * y) as f32) < (params.radius + o).powi(2) {
                         asteroid.spawn_bundle(SpriteBundle {
                             sprite: Sprite {
@@ -134,7 +136,7 @@ fn expand_asteroids(
                     params.frequency_scale,
                     params.amplitude_scale,
                     params.radius,
-                    0.,
+                    params.seed as f32,
                 ),
             });
 

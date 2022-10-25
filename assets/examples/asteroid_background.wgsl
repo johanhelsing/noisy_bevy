@@ -24,11 +24,16 @@ fn fragment(
     let freq_scale = params.x;
     let amp_scale = params.y;
     let radius = params.z;
+    let seed = params.w;
 
     let r = sqrt(p.x * p.x + p.y * p.y);
     let d = r - radius;
 
-    let n = simplex_noise_2d(p * freq_scale) * amp_scale;
+    // smooth noise same as used on cpu...
+    // let n = simplex_noise_2d(p * freq_scale) * amp_scale;
+
+    // ...or add some extra turbulence to the "atmosphere"
+    let n = fbm_simplex_2d_seeded(p * freq_scale, 7, 2.0, 0.5, seed) * amp_scale;
 
     let v = d - n;
     let v = pow(-v * 0.1 + 0.3, 2.1);
