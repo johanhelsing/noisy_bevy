@@ -1,7 +1,7 @@
 [package]
 authors = ["Johan Helsing <johanhelsing@gmail.com>"]
 categories = ["game-development"]
-description = "Procedural noise primitives for bevy"
+description = "Procedural noise primitives for Bevy"
 edition = "2021"
 keywords = ["gamedev", "bevy", "noise", "pcg", "simplex_noise"]
 license = "MIT"
