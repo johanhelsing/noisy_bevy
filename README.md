@@ -58,7 +58,7 @@ let p = vec2(12.3, 45.6);
 let value = simplex_noise_2d(p);
 ```
 
-See the [`asteroids example`](./examples/asteroids.rs), for an example that uses noise to procedurally generate a tilemap on the CPU and a matching background in a wgsl shader.
+See the [`asteroids example`](https://github.com/johanhelsing/noisy_bevy/blob/main/examples/asteroids.rs), for an example that uses noise to procedurally generate a tilemap on the CPU and a matching background in a wgsl shader.
 
 ## Bevy Version Support
 
@@ -74,8 +74,8 @@ The original simplex noise source is MIT-only, however all changes made by me or
 
 The noise primitives are ports/copies of these
 
-- https://github.com/stegu/psrdnoise
-- https://gist.github.com/munrocket/236ed5ba7e409b8bdf1ff6eca5dcdc39
+- <https://github.com/stegu/psrdnoise>
+- <https://gist.github.com/munrocket/236ed5ba7e409b8bdf1ff6eca5dcdc39>
 
 ## Contributions
 
