@@ -62,6 +62,10 @@ See the [`asteroids example`](https://github.com/johanhelsing/noisy_bevy/blob/ma
 
 The `main` branch targets the latest bevy release.
 
+|bevy|noisy_bevy|
+|----|----------|
+| 0.8| 0.1, main|
+
 ## License
 
 MIT
