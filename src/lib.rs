@@ -36,10 +36,10 @@ fn permute_3(x: Vec3) -> Vec3 {
 /// Simplex noise in two dimensions
 pub fn simplex_noise_2d(v: Vec2) -> f32 {
     const C: Vec4 = vec4(
-        0.211324865405187,
-        0.366025403784439,
-        -0.577350269189626,
-        0.024390243902439,
+        0.211324865405187,  // (3.0 - sqrt(3.0)) / 6.0
+        0.366025403784439,  // 0.5 * (sqrt(3.0) - 1.0)
+        -0.577350269189626, // -1.0 + 2.0 * C.x
+        0.024390243902439,  // 1.0 / 41.0
     );
     let mut i: Vec2 = (v + Vec2::dot(v, C.yy())).floor();
     let x0 = v - i + Vec2::dot(i, C.xx());
