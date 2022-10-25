@@ -97,7 +97,6 @@ impl Default for AsteroidBundle {
 fn expand_asteroids(
     changed_asteroids: Query<(Entity, &AsteroidParams), Changed<AsteroidParams>>,
     mut commands: Commands,
-    // asset_server: Res<AssetServer>,
     mut meshes: ResMut<Assets<Mesh>>,
     mut asteroid_materials: ResMut<Assets<AsteroidBackgroundMaterial>>,
 ) {
