@@ -1,9 +1,8 @@
 # noisy_bevy
 
-<!-- [![crates.io](https://img.shields.io/crates/v/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy) -->
+[![crates.io](https://img.shields.io/crates/v/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy)
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg)
-<!-- [![crates.io](https://img.shields.io/crates/d/noisy_bevy.svg)](https://crates.io/crates/noisy_bevy) -->
-<!-- [![docs.rs](https://img.shields.io/docsrs/noisy_bevy)](https://docs.rs/noisy_bevy) -->
+[![docs.rs](https://img.shields.io/docsrs/noisy_bevy)](https://docs.rs/noisy_bevy)
 
 Simple stupid noise primitives for glam types (`Vec2`, `Vec3`) and wgsl.
 
@@ -23,14 +22,11 @@ Main motivations are:
 - [`fbm_simplex_2d_seeded`]
 - [`fbm_simplex_3d`]
 
-## todo:
-
-- seeded version of 3d simplex noise
-- maybe ridged and hybrid multifractal, worley, turbulence, voronoise. I want to keep the scope and complexity down, though
-
 ## Usage
 
-Rust: Zero initialization, just call the noise functions:
+### From rust
+
+Zero initialization, just call the noise functions:
 
 ```rust
 use bevy::prelude::*;
@@ -40,14 +36,16 @@ let p = Vec2::new(12.3, 45.6);
 let value = simplex_noise_2d(p);
 ```
 
-wgsl: Just add the plugin to the app:
+### From wgsl shaders
+
+First add the plugin to the Bevy app:
 
 ```rust ignore
 App::new()
     .add_plugin(NoisyShaderPlugin)
 ```
 
-And use it in your shaders, with the same API as on the CPU-side:
+And import it and use it in your shaders, with the same API as on the CPU-side:
 
 ```wgsl
 #import noisy_bevy::prelude
