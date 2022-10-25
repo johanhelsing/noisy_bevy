@@ -293,3 +293,74 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
 
     sum
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+    use insta::assert_debug_snapshot;
+
+    fn sample_2d_fn(f: fn(Vec2) -> f32) -> Vec<f32> {
+        let mut values = Vec::new();
+        for x in -20..20 {
+            let x = x as f32 / 10.;
+            for y in -20..20 {
+                let y = y as f32 / 10.;
+                let v = f(vec2(x, y));
+                values.push(v);
+            }
+        }
+        values
+    }
+
+    fn sample_3d_fn(f: fn(Vec3) -> f32) -> Vec<f32> {
+        let mut values = Vec::new();
+        for x in -5..5 {
+            let x = x as f32 / 10.;
+            for y in -5..5 {
+                let y = y as f32 / 10.;
+                for z in -5..5 {
+                    let z = z as f32 / 10.;
+                    let v = f(vec3(x, y, z));
+                    values.push(v);
+                }
+            }
+        }
+        values
+    }
+
+    #[test]
+    fn simplex_2d_values_unchanged() {
+        assert_debug_snapshot!(sample_2d_fn(simplex_noise_2d));
+    }
+
+    #[test]
+    fn simplex_2d_seeded_values_unchanged() {
+        assert_debug_snapshot!(sample_2d_fn(|p| simplex_noise_2d_seeded(p, 0.0)));
+        assert_debug_snapshot!(sample_2d_fn(|p| simplex_noise_2d_seeded(p, 123.0)));
+    }
+
+    #[test]
+    fn simplex_3d_values_unchanged() {
+        assert_debug_snapshot!(sample_3d_fn(simplex_noise_3d));
+    }
+
+    #[test]
+    fn fbm_2d_values_unchanged() {
+        assert_debug_snapshot!(sample_2d_fn(|p| { fbm_simplex_2d(p, 5, 2.0, 0.5) }));
+    }
+
+    #[test]
+    fn fbm_2d_seeded_values_unchanged() {
+        assert_debug_snapshot!(sample_2d_fn(|p| {
+            fbm_simplex_2d_seeded(p, 5, 2.0, 0.5, 0.0)
+        }));
+        assert_debug_snapshot!(sample_2d_fn(|p| {
+            fbm_simplex_2d_seeded(p, 5, 2.0, 0.5, 123.0)
+        }));
+    }
+
+    #[test]
+    fn fbm_3d_values_unchanged() {
+        assert_debug_snapshot!(sample_3d_fn(|p| { fbm_simplex_3d(p, 5, 2.0, 0.5) }));
+    }
+}
