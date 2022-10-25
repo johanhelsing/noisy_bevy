@@ -36,10 +36,10 @@ fn permute_3(x: Vec3) -> Vec3 {
 /// Simplex noise in two dimensions
 pub fn simplex_noise_2d(v: Vec2) -> f32 {
     const C: Vec4 = vec4(
-        0.211324865405187,  // (3.0 - sqrt(3.0)) / 6.0
-        0.366025403784439,  // 0.5 * (sqrt(3.0) - 1.0)
-        -0.577350269189626, // -1.0 + 2.0 * C.x
-        0.024390243902439,  // 1.0 / 41.0
+        0.211_324_87,  // (3.0 - sqrt(3.0)) / 6.0
+        0.366_025_42,  // 0.5 * (sqrt(3.0) - 1.0)
+        -0.577_350_26, // -1.0 + 2.0 * C.x
+        1. / 41.,
     );
     let mut i: Vec2 = (v + Vec2::dot(v, C.yy())).floor();
     let x0 = v - i + Vec2::dot(i, C.xx());
@@ -65,7 +65,7 @@ pub fn simplex_noise_2d(v: Vec2) -> f32 {
     let h = x.abs() - 0.5;
     let ox = (x + 0.5).floor();
     let a0 = x - ox;
-    m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+    m *= 1.792_842_9 - 0.853_734_73 * (a0 * a0 + h * h);
     let g = vec3(
         a0.x * x0.x + h.x * x0.y,
         a0.y * x12.x + h.y * x12.y,
@@ -78,10 +78,10 @@ pub fn simplex_noise_2d(v: Vec2) -> f32 {
 /// Simplex noise in two dimensions
 pub fn simplex_noise_2d_seeded(v: Vec2, seed: f32) -> f32 {
     const C: Vec4 = vec4(
-        0.211324865405187,  // (3.0 - sqrt(3.0)) / 6.0
-        0.366025403784439,  // 0.5 * (sqrt(3.0) - 1.0)
-        -0.577350269189626, // -1.0 + 2.0 * C.x
-        0.024390243902439,  // 1.0 / 41.0
+        0.211_324_87,  // (3.0 - sqrt(3.0)) / 6.0
+        0.366_025_42,  // 0.5 * (sqrt(3.0) - 1.0)
+        -0.577_350_26, // -1.0 + 2.0 * C.x
+        1. / 41.,
     );
 
     // first corner
@@ -122,7 +122,7 @@ pub fn simplex_noise_2d_seeded(v: Vec2, seed: f32) -> f32 {
 
     // normalize gradients implicitly by scaling m
     // approximation of: m *= inversesqrt(a0 * a0 + h * h);
-    m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+    m *= 1.792_842_9 - 0.853_734_73 * (a0 * a0 + h * h);
     let g = vec3(
         a0.x * x0.x + h.x * x0.y,
         a0.y * x12.x + h.y * x12.y,
@@ -138,7 +138,7 @@ fn permute_4(x: Vec4) -> Vec4 {
 }
 
 fn taylor_inv_sqrt_4(r: Vec4) -> Vec4 {
-    1.79284291400159 - 0.85373472095314 * r
+    1.792_842_9 - 0.853_734_73 * r
 }
 
 #[inline]
