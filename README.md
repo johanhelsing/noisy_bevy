@@ -14,18 +14,19 @@ Main motivations are:
 
 ![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
 
-Implemented:
+## Implemented noise primitives:
 
 - `simplex_noise_2d`
 - `simplex_noise_2d_seeded`
 - `simplex_noise_3d`
+- `fbm_simplex_2d`
+- `fbm_simplex_2d_seeded`
+- `fbm_simplex_3d`
 
-todo:
+## todo:
 
 - seeded version of 3d simplex noise
-- `fbm_2d`
-- `fbm_3d`
-- maybe others, I want to keep the scope and complexity down, though
+- maybe ridged and hybrid multifractal, worley, turbulence, voronoise. I want to keep the scope and complexity down, though
 
 ## Usage
 
@@ -67,7 +68,7 @@ The `main` branch targets the latest bevy release.
 
 MIT
 
-The original noise source is MIT-only, however all changes made by me or PRs to this repo are also available under Apache-2.0.
+The original simplex noise source is MIT-only, however all changes made by me or PRs to this repo are also available under Apache-2.0.
 
 ## Acknowledgments
 
