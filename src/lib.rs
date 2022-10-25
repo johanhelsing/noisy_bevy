@@ -242,3 +242,54 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
         ),
     )
 }
+
+/// Fractional brownian motion (fbm) based on 2d simplex noise
+pub fn fbm_simplex_2d(pos: Vec2, octaves: usize, lacunarity: f32, gain: f32) -> f32 {
+    let mut sum = 0.;
+    let mut amplitude = 1.;
+    let mut frequency = 1.;
+
+    for _ in 0..octaves {
+        sum += simplex_noise_2d(pos * frequency) * amplitude;
+        amplitude *= gain;
+        frequency *= lacunarity;
+    }
+
+    sum
+}
+
+/// Fractional brownian motion (fbm) based on seeded 2d simplex noise
+pub fn fbm_simplex_2d_seeded(
+    pos: Vec2,
+    octaves: usize,
+    lacunarity: f32,
+    gain: f32,
+    seed: f32,
+) -> f32 {
+    let mut sum = 0.;
+    let mut amplitude = 1.;
+    let mut frequency = 1.;
+
+    for _ in 0..octaves {
+        sum += simplex_noise_2d_seeded(pos * frequency, seed) * amplitude;
+        amplitude *= gain;
+        frequency *= lacunarity;
+    }
+
+    sum
+}
+
+/// Fractional brownian motion (fbm) based on 3d simplex noise
+pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> f32 {
+    let mut sum = 0.;
+    let mut amplitude = 1.;
+    let mut frequency = 1.;
+
+    for _ in 0..octaves {
+        sum += simplex_noise_3d(pos * frequency) * amplitude;
+        amplitude *= gain;
+        frequency *= lacunarity;
+    }
+
+    sum
+}
