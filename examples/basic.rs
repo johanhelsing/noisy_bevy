@@ -19,7 +19,7 @@ fn main() {
 fn setup(mut commands: Commands) {
     let mut cam = Camera2dBundle::default();
     cam.projection.scaling_mode = ScalingMode::FixedVertical(70.);
-    commands.spawn_bundle(cam).insert(PanCam::default());
+    commands.spawn((cam, PanCam::default()));
 
     const FREQUENCY_SCALE: f32 = 0.05;
     const AMPLITUDE_SCALE: f32 = 4.0;
@@ -41,7 +41,7 @@ fn setup(mut commands: Commands) {
             let height = RADIUS + offset - ((x * x + y * y) as f32).sqrt();
 
             // spawn a corresponding tile with a color thats more white the higher the height
-            commands.spawn_bundle(SpriteBundle {
+            commands.spawn(SpriteBundle {
                 sprite: Sprite {
                     color: Color::WHITE * height * 0.03,
                     custom_size: Some(Vec2::splat(1.)),
