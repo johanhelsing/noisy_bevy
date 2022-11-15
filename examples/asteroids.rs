@@ -1,5 +1,4 @@
 use bevy::{
-    asset::AssetServerSettings,
     math::{vec2, vec4},
     prelude::*,
     reflect::TypeUuid,
@@ -13,12 +12,11 @@ use noisy_bevy::{simplex_noise_2d_seeded, NoisyShaderPlugin};
 fn main() {
     App::new()
         .register_type::<AsteroidParams>()
-        .insert_resource(AssetServerSettings {
+        .insert_resource(ClearColor(Color::BLACK))
+        .add_plugins(DefaultPlugins.set(AssetPlugin {
             watch_for_changes: true,
             ..default()
-        })
-        .insert_resource(ClearColor(Color::BLACK))
-        .add_plugins(DefaultPlugins)
+        }))
         .add_plugin(NoisyShaderPlugin)
         .add_plugin(PanCamPlugin::default())
         .add_plugin(Material2dPlugin::<AsteroidBackgroundMaterial>::default())
@@ -32,9 +30,9 @@ fn setup(mut commands: Commands) {
     let mut cam = Camera2dBundle::default();
     cam.projection.scaling_mode = ScalingMode::FixedVertical(50.);
 
-    commands.spawn_bundle(cam).insert(PanCam::default());
+    commands.spawn((cam, PanCam::default()));
 
-    commands.spawn_bundle(AsteroidBundle::default());
+    commands.spawn(AsteroidBundle::default());
 }
 
 #[derive(AsBindGroup, TypeUuid, Clone)]
@@ -113,7 +111,7 @@ fn expand_asteroids(
                     // let o = noisy_bevy::fbm_simplex_2d(p * params.frequency_scale, 3, 2., 0.5)
                     //     * params.amplitude_scale;
                     if ((x * x + y * y) as f32) < (params.radius + o).powi(2) {
-                        asteroid.spawn_bundle(SpriteBundle {
+                        asteroid.spawn(SpriteBundle {
                             sprite: Sprite {
                                 color: Color::GRAY,
                                 custom_size: Some(Vec2::splat(1.)),
@@ -141,7 +139,7 @@ fn expand_asteroids(
 
             let quad_handle = meshes.add(Mesh::from(shape::Quad::new(Vec2::new(100.0, 100.0))));
 
-            asteroid.spawn_bundle(MaterialMesh2dBundle {
+            asteroid.spawn(MaterialMesh2dBundle {
                 mesh: quad_handle.into(),
                 material: material_handle,
                 transform: Transform {
