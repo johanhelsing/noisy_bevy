@@ -64,8 +64,9 @@ The `main` branch targets the latest bevy release.
 
 |bevy|noisy_bevy|
 |----|----------|
-| 0.9| 0.2, main|
-| 0.8| 0.1      |
+|0.10| 0.3, main|
+|0.9 | 0.2      |
+|0.8 | 0.1      |
 
 ## License
 
