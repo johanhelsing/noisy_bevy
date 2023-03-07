@@ -1,5 +1,4 @@
-#import bevy_pbr::mesh_view_bindings
-#import bevy_pbr::utils
+#import bevy_render::view
 #import noisy_bevy::prelude
 // #import bevy_pbr::mesh_functions
 #import bevy_sprite::mesh2d_bindings
@@ -17,9 +16,9 @@ fn fragment(
     #import bevy_sprite::mesh2d_vertex_output
 ) -> @location(0) vec4<f32> {
     // perf: better to do in vertex shader!
-    let p = world_position.xy - vec2(mesh.model[3].x, mesh.model[3].y); // ignoring rotation
+    var p = world_position.xy - vec2(mesh.model[3].x, mesh.model[3].y); // ignoring rotation
     // sample noise
-    let p = p.xy;
+    p = p.xy;
     let params = material.params;
     let freq_scale = params.x;
     let amp_scale = params.y;
@@ -35,8 +34,8 @@ fn fragment(
     // ...or add some extra turbulence to the "atmosphere"
     let n = fbm_simplex_2d_seeded(p * freq_scale, 7, 2.0, 0.5, seed) * amp_scale;
 
-    let v = d - n;
-    let v = pow(-v * 0.1 + 0.3, 2.1);
+    var v = d - n;
+    v = pow(-v * 0.1 + 0.3, 2.1);
 
     return vec4(v, v, v, 1.);
 }

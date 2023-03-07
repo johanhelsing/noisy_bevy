@@ -10,18 +10,21 @@ repository = "https://github.com/johanhelsing/noisy_bevy"
 version = "0.2.0"
 
 [dependencies]
-bevy = {version = "0.9", features = ["bevy_asset", "render"], default-features = false}
+bevy = { version = "0.10", features = ["bevy_asset", "bevy_render"], default-features = false }
 
 [dev-dependencies]
-bevy = {version = "0.9", default-features = false, features = [
-  "render",
+bevy = { version = "0.10", default-features = false, features = [
+  "bevy_render",
+  "bevy_sprite",
   "bevy_asset",
   "bevy_winit",
   "filesystem_watcher",
   "x11", # github actions runners don't have libxkbcommon installed, so can't use wayland
-]}
+] }
 rand = "0.8"
-bevy_egui = {version = "0.17", default-features = false, features = ["default_fonts"]}
-bevy-inspector-egui = {version = "0.14", default-features = false}
-bevy_pancam = { version = "0.7", features = ["bevy-inspector-egui", "bevy_egui"] }
+# bevy_egui = {version = "0.17", default-features = false, features = ["default_fonts"]}
+bevy_egui = {git = "https://github.com/mvlabat/bevy_egui", branch = "bevy-0.10", default-features = false, features = ["default_fonts"]}
+# bevy-inspector-egui = {version = "0.14", default-features = false}
+# bevy_pancam = { version = "0.7", features = ["bevy-inspector-egui", "bevy_egui"] }
+bevy_pancam = { git = "https://github.com/johanhelsing/bevy_pancam", branch = "bevy-0.10", features = ["bevy_egui"] }
 insta = "1.21"

@@ -5,7 +5,7 @@ use bevy::{
     render::{camera::ScalingMode, render_resource::AsBindGroup},
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle},
 };
-use bevy_inspector_egui::WorldInspectorPlugin;
+// use bevy_inspector_egui::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
 use noisy_bevy::{simplex_noise_2d_seeded, NoisyShaderPlugin};
 
@@ -20,7 +20,7 @@ fn main() {
         .add_plugin(NoisyShaderPlugin)
         .add_plugin(PanCamPlugin::default())
         .add_plugin(Material2dPlugin::<AsteroidBackgroundMaterial>::default())
-        .add_plugin(WorldInspectorPlugin::default())
+        // .add_plugin(WorldInspectorPlugin::default())
         .add_startup_system(setup)
         .add_system(expand_asteroids)
         .run();
