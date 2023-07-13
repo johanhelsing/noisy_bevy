@@ -48,7 +48,7 @@ App::new()
 And import it and use it in your shaders, with the same API as on the CPU-side:
 
 ```wgsl
-#import noisy_bevy::prelude
+#import noisy_bevy simplex_noise_2d
 
 // ...
 

@@ -1,4 +1,4 @@
-#import noisy_bevy::prelude fbm_simplex_2d_seeded
+#import noisy_bevy fbm_simplex_2d_seeded
 #import bevy_sprite::mesh2d_bindings mesh
 #import bevy_sprite::mesh2d_vertex_output  MeshVertexOutput
 

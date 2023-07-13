@@ -9,10 +9,10 @@ use bevy::{
 
 /// Adds noise library as a wgsl import
 ///
-/// General functionality can be included through:
+/// General functionality can be imported through:
 ///
 /// ```wgsl
-/// #import noisy_bevy::prelude
+/// #import noisy_bevy
 /// ```
 pub struct NoisyShaderPlugin;
 
@@ -24,8 +24,8 @@ impl Plugin for NoisyShaderPlugin {
 
 fn load_shaders(mut shaders: ResMut<Assets<Shader>>) {
     let shader = Shader::from_wgsl(
-        include_str!("../assets/simple_noise_prelude.wgsl",),
-        "simple_noise_prelude.wgsl",
+        include_str!("../assets/noisy_bevy.wgsl",),
+        "noisy_bevy.wgsl",
     );
     let handle_id = HandleId::random::<Shader>();
     shaders.set_untracked(handle_id, shader);

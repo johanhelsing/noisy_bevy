@@ -1,6 +1,6 @@
 //  MIT License. © Ian McEwan, Stefan Gustavson, Munrocket, Johan Helsing
 
-#define_import_path noisy_bevy::prelude
+#define_import_path noisy_bevy
 
 fn permute_3_(x: vec3<f32>) -> vec3<f32> {
     return (((x * 34.) + 1.) * x) % vec3(289.);
