@@ -1,8 +1,8 @@
 //  MIT License. © Ian McEwan, Stefan Gustavson, Munrocket, Johan Helsing
 
-#define_import_path noisy_bevy::prelude
+#define_import_path noisy_bevy
 
-fn permute_3(x: vec3<f32>) -> vec3<f32> {
+fn permute_3_(x: vec3<f32>) -> vec3<f32> {
     return (((x * 34.) + 1.) * x) % vec3(289.);
 }
 
@@ -25,7 +25,7 @@ fn simplex_noise_2d(v: vec2<f32>) -> f32 {
     // permutations
     i = i % vec2(289.);
 
-    let p = permute_3(permute_3(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
+    let p = permute_3_(permute_3_(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
     var m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), vec3(0.));
     m *= m;
     m *= m;
@@ -65,8 +65,8 @@ fn simplex_noise_2d_seeded(v: vec2<f32>, seed: f32) -> f32 {
     // permutations
     i = i % vec2(289.);
 
-    var p = permute_3(permute_3(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
-    p = permute_3(p + vec3(seed));
+    var p = permute_3_(permute_3_(i.y + vec3(0., i1.y, 1.)) + i.x + vec3(0., i1.x, 1.));
+    p = permute_3_(p + vec3(seed));
     var m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), vec3(0.));
     m *= m;
     m *= m;
@@ -87,11 +87,11 @@ fn simplex_noise_2d_seeded(v: vec2<f32>, seed: f32) -> f32 {
     return 130. * dot(m, g);
 }
 
-fn permute_4(x: vec4<f32>) -> vec4<f32> {
+fn permute_4_(x: vec4<f32>) -> vec4<f32> {
     return ((x * 34. + 1.) * x) % vec4<f32>(289.);
 }
 
-fn taylor_inv_sqrt_4(r: vec4<f32>) -> vec4<f32> {
+fn taylor_inv_sqrt_4_(r: vec4<f32>) -> vec4<f32> {
     return 1.79284291400159 - 0.85373472095314 * r;
 }
 
@@ -116,7 +116,7 @@ fn simplex_noise_3d(v: vec3<f32>) -> f32 {
 
     // permutations
     i = i % vec3(289.);
-    let p = permute_4(permute_4(permute_4(
+    let p = permute_4_(permute_4_(permute_4_(
         i.z + vec4(0., i1.z, i2.z, 1.)) +
         i.y + vec4(0., i1.y, i2.y, 1.)) +
         i.x + vec4(0., i1.x, i2.x, 1.)
@@ -151,7 +151,7 @@ fn simplex_noise_3d(v: vec3<f32>) -> f32 {
     var p3 = vec3(a1.zw, h.w);
 
     // normalize gradients
-    let norm = taylor_inv_sqrt_4(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
+    let norm = taylor_inv_sqrt_4_(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
     p0 = p0 * norm.x;
     p1 = p1 * norm.y;
     p2 = p2 * norm.z;

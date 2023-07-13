@@ -1,11 +1,14 @@
+use std::time::Duration;
+
 use bevy::{
+    asset::ChangeWatcher,
     math::{vec2, vec4},
     prelude::*,
-    reflect::TypeUuid,
+    reflect::{TypePath, TypeUuid},
     render::{camera::ScalingMode, render_resource::AsBindGroup},
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle},
 };
-use bevy_inspector_egui::quick::WorldInspectorPlugin;
+// use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
 use noisy_bevy::{simplex_noise_2d_seeded, NoisyShaderPlugin};
 
@@ -13,16 +16,18 @@ fn main() {
     App::new()
         .register_type::<AsteroidParams>()
         .insert_resource(ClearColor(Color::BLACK))
-        .add_plugins(DefaultPlugins.set(AssetPlugin {
-            watch_for_changes: true,
-            ..default()
-        }))
-        .add_plugin(NoisyShaderPlugin)
-        .add_plugin(PanCamPlugin::default())
-        .add_plugin(Material2dPlugin::<AsteroidBackgroundMaterial>::default())
-        .add_plugin(WorldInspectorPlugin::new())
-        .add_startup_system(setup)
-        .add_system(expand_asteroids)
+        .add_plugins((
+            DefaultPlugins.set(AssetPlugin {
+                watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
+                ..default()
+            }),
+            NoisyShaderPlugin,
+            PanCamPlugin::default(),
+            Material2dPlugin::<AsteroidBackgroundMaterial>::default(),
+            // WorldInspectorPlugin::new()
+        ))
+        .add_systems(Startup, setup)
+        .add_systems(Update, expand_asteroids)
         .run();
 }
 
@@ -35,7 +40,7 @@ fn setup(mut commands: Commands) {
     commands.spawn(AsteroidBundle::default());
 }
 
-#[derive(AsBindGroup, TypeUuid, Clone)]
+#[derive(AsBindGroup, TypeUuid, Clone, TypePath)]
 #[uuid = "1e449d2e-6901-4bff-95fa-d7407ad62b58"]
 struct AsteroidBackgroundMaterial {
     #[uniform(0)]
