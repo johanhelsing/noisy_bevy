@@ -10,9 +10,8 @@ use noisy_bevy::fbm_simplex_2d;
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
-        .add_plugins(DefaultPlugins)
-        .add_plugin(PanCamPlugin::default())
-        .add_startup_system(setup)
+        .add_plugins((DefaultPlugins, PanCamPlugin::default()))
+        .add_systems(Startup, setup)
         .run();
 }
 

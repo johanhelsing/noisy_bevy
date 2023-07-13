@@ -1,7 +1,6 @@
-#import bevy_render::view
-#import noisy_bevy::prelude
-// #import bevy_pbr::mesh_functions
-#import bevy_sprite::mesh2d_bindings
+#import noisy_bevy::prelude fbm_simplex_2d_seeded
+#import bevy_sprite::mesh2d_bindings mesh
+#import bevy_sprite::mesh2d_vertex_output  MeshVertexOutput
 
 struct AsteroidMaterial {
     params: vec4<f32>
@@ -12,13 +11,10 @@ var<uniform> material: AsteroidMaterial;
 
 @fragment
 fn fragment(
-    @builtin(position) position: vec4<f32>,
-    #import bevy_sprite::mesh2d_vertex_output
+    vertex_output: MeshVertexOutput,
 ) -> @location(0) vec4<f32> {
     // perf: better to do in vertex shader!
-    var p = world_position.xy - vec2(mesh.model[3].x, mesh.model[3].y); // ignoring rotation
-    // sample noise
-    p = p.xy;
+    var p = vertex_output.world_position.xy - vec2(mesh.model[3].x, mesh.model[3].y); // ignoring rotation
     let params = material.params;
     let freq_scale = params.x;
     let amp_scale = params.y;

@@ -18,12 +18,15 @@ pub struct NoisyShaderPlugin;
 
 impl Plugin for NoisyShaderPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(load_shaders);
+        app.add_systems(Startup, load_shaders);
     }
 }
 
 fn load_shaders(mut shaders: ResMut<Assets<Shader>>) {
-    let shader = Shader::from_wgsl(include_str!("../assets/simple_noise_prelude.wgsl"));
+    let shader = Shader::from_wgsl(
+        include_str!("../assets/simple_noise_prelude.wgsl",),
+        "simple_noise_prelude.wgsl",
+    );
     let handle_id = HandleId::random::<Shader>();
     shaders.set_untracked(handle_id, shader);
 }
