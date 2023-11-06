@@ -2,7 +2,7 @@
 #![doc = include_str!("../README.md")]
 
 use bevy::{
-    asset::HandleId,
+    asset::load_internal_asset,
     math::{vec2, vec3, vec4, Vec2Swizzles, Vec3Swizzles, Vec4Swizzles},
     prelude::*,
 };
@@ -18,18 +18,18 @@ pub struct NoisyShaderPlugin;
 
 impl Plugin for NoisyShaderPlugin {
     fn build(&self, app: &mut App) {
-        app.add_systems(Startup, load_shaders);
+        // workaround: embedded_asset is broken in bevy 0.12.0
+        load_internal_asset!(
+            app,
+            NOISY_SHADER_HANDLE,
+            "../assets/noisy_bevy.wgsl",
+            Shader::from_wgsl
+        );
     }
 }
 
-fn load_shaders(mut shaders: ResMut<Assets<Shader>>) {
-    let shader = Shader::from_wgsl(
-        include_str!("../assets/noisy_bevy.wgsl",),
-        "noisy_bevy.wgsl",
-    );
-    let handle_id = HandleId::random::<Shader>();
-    shaders.set_untracked(handle_id, shader);
-}
+const NOISY_SHADER_HANDLE: Handle<Shader> =
+    Handle::weak_from_u128(224136012015454690045205738992444526155);
 
 fn permute_3(x: Vec3) -> Vec3 {
     (((x * 34.) + 1.) * x) % Vec3::splat(289.)
