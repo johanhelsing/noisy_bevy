@@ -7,22 +7,22 @@ keywords = ["gamedev", "bevy", "noise", "pcg", "simplex_noise"]
 license = "MIT"
 name = "noisy_bevy"
 repository = "https://github.com/johanhelsing/noisy_bevy"
-version = "0.4.0"
+version = "0.5.0"
 
 [dependencies]
-bevy = { version = "0.11", features = ["bevy_asset", "bevy_render"], default-features = false }
+bevy = { version = "0.12", default-features = false, features = [
+  "bevy_asset",
+  "bevy_render"
+ ] }
 
 [dev-dependencies]
-bevy = { version = "0.11", default-features = false, features = [
-  "bevy_render",
+bevy = { version = "0.12", default-features = false, features = [
   "bevy_sprite",
-  "bevy_asset",
   "bevy_winit",
-  "filesystem_watcher",
   "x11", # github actions runners don't have libxkbcommon installed, so can't use wayland
 ] }
 rand = "0.8"
-bevy_egui = {version = "0.21.0", default-features = false, features = ["default_fonts"]}
+bevy_egui = { version = "0.23", default-features = false, features = ["default_fonts"] }
 # bevy-inspector-egui = {version = "0.19.1", default-features = false}
-bevy_pancam = {version = "0.9", features = ["bevy_egui"] }
+bevy_pancam = { version = "0.10", features = ["bevy_egui"] }
 insta = "1.21"

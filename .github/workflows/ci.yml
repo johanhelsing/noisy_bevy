@@ -16,8 +16,6 @@ jobs:
 
       - name: Install stable toolchain
         uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
 
       - name: Cache
         uses: Swatinem/rust-cache@v2
@@ -34,8 +32,6 @@ jobs:
 
       - name: Install stable toolchain
         uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
 
       - name: Cache
         uses: Swatinem/rust-cache@v2

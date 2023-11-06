@@ -1,10 +1,6 @@
-use std::time::Duration;
-
 use bevy::{
-    asset::ChangeWatcher,
     math::{vec2, vec4},
     prelude::*,
-    reflect::{TypePath, TypeUuid},
     render::{camera::ScalingMode, render_resource::AsBindGroup},
     sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle},
 };
@@ -17,10 +13,7 @@ fn main() {
         .register_type::<AsteroidParams>()
         .insert_resource(ClearColor(Color::BLACK))
         .add_plugins((
-            DefaultPlugins.set(AssetPlugin {
-                watch_for_changes: ChangeWatcher::with_delay(Duration::from_millis(200)),
-                ..default()
-            }),
+            DefaultPlugins,
             NoisyShaderPlugin,
             PanCamPlugin::default(),
             Material2dPlugin::<AsteroidBackgroundMaterial>::default(),
@@ -40,14 +33,16 @@ fn setup(mut commands: Commands) {
     commands.spawn(AsteroidBundle::default());
 }
 
-#[derive(AsBindGroup, TypeUuid, Clone, TypePath)]
-#[uuid = "1e449d2e-6901-4bff-95fa-d7407ad62b58"]
+#[derive(Asset, AsBindGroup, Reflect, Debug, Clone)]
 struct AsteroidBackgroundMaterial {
     #[uniform(0)]
     params: Vec4,
 }
 
 impl Material2d for AsteroidBackgroundMaterial {
+    fn vertex_shader() -> bevy::render::render_resource::ShaderRef {
+        "examples/asteroid_background.wgsl".into()
+    }
     fn fragment_shader() -> bevy::render::render_resource::ShaderRef {
         "examples/asteroid_background.wgsl".into()
     }
@@ -79,7 +74,8 @@ struct AsteroidBundle {
     transform: Transform,
     global_transform: GlobalTransform,
     visibility: Visibility,
-    computed_visibility: ComputedVisibility,
+    view_visibility: ViewVisibility,
+    inherited_visibility: InheritedVisibility,
     params: AsteroidParams,
 }
 
@@ -90,8 +86,9 @@ impl Default for AsteroidBundle {
             transform: default(),
             global_transform: default(),
             visibility: default(),
-            computed_visibility: default(),
             params: default(),
+            view_visibility: default(),
+            inherited_visibility: default(),
         }
     }
 }
