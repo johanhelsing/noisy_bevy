@@ -10,19 +10,20 @@ repository = "https://github.com/johanhelsing/noisy_bevy"
 version = "0.5.0"
 
 [dependencies]
-bevy = { version = "0.12", default-features = false, features = [
-  "bevy_asset",
-  "bevy_render"
- ] }
+bevy = { version = "0.13", default-features = false, features = [
+    "bevy_asset",
+    "bevy_render"
+] }
 
 [dev-dependencies]
-bevy = { version = "0.12", default-features = false, features = [
-  "bevy_sprite",
-  "bevy_winit",
-  "x11", # github actions runners don't have libxkbcommon installed, so can't use wayland
+bevy = { version = "0.13", default-features = false, features = [
+    "bevy_sprite",
+    "bevy_winit",
+    "x11", # github actions runners don't have libxkbcommon installed, so can't use wayland
 ] }
 rand = "0.8"
-bevy_egui = { version = "0.23", default-features = false, features = ["default_fonts"] }
-# bevy-inspector-egui = {version = "0.19.1", default-features = false}
-bevy_pancam = { version = "0.10", features = ["bevy_egui"] }
+bevy_egui = { version = "0.25", default-features = false, features = ["default_fonts"] }
+# TODO: Change back to crates.io version once bevy_pancam 0.11 is released (https://github.com/johanhelsing/bevy_pancam/pull/56):
+#       bevy_pancam = { version = "0.11", features = ["bevy_egui"] }
+bevy_pancam = { git = "https://github.com/tomara-x/bevy_pancam.git", branch = "main", features = ["bevy_egui"] }
 insta = "1.21"
