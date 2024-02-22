@@ -23,7 +23,5 @@ bevy = { version = "0.13", default-features = false, features = [
 ] }
 rand = "0.8"
 bevy_egui = { version = "0.25", default-features = false, features = ["default_fonts"] }
-# TODO: Change back to crates.io version once bevy_pancam 0.11 is released (https://github.com/johanhelsing/bevy_pancam/pull/56):
-#       bevy_pancam = { version = "0.11", features = ["bevy_egui"] }
-bevy_pancam = { git = "https://github.com/tomara-x/bevy_pancam.git", branch = "main", features = ["bevy_egui"] }
+bevy_pancam = { version = "0.11", features = ["bevy_egui"] }
 insta = "1.21"
