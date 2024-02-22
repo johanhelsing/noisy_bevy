@@ -139,7 +139,7 @@ fn expand_asteroids(
                 ),
             });
 
-            let quad_handle = meshes.add(Mesh::from(shape::Quad::new(Vec2::new(100.0, 100.0))));
+            let quad_handle = meshes.add(Mesh::from(Rectangle::from_size(Vec2::new(100.0, 100.0))));
 
             asteroid.spawn(MaterialMesh2dBundle {
                 mesh: quad_handle.into(),
