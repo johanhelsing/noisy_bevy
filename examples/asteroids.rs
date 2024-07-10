@@ -115,7 +115,7 @@ fn expand_asteroids(
                     if ((x * x + y * y) as f32) < (params.radius + o).powi(2) {
                         asteroid.spawn(SpriteBundle {
                             sprite: Sprite {
-                                color: Color::GRAY,
+                                color: Color::WHITE.with_luminance(0.2),
                                 custom_size: Some(Vec2::splat(1.)),
                                 ..default()
                             },

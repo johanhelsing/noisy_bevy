@@ -42,7 +42,7 @@ fn setup(mut commands: Commands) {
             // spawn a corresponding tile with a color thats more white the higher the height
             commands.spawn(SpriteBundle {
                 sprite: Sprite {
-                    color: Color::WHITE * height * 0.03,
+                    color: Color::WHITE.with_luminance(height * 0.03),
                     custom_size: Some(Vec2::splat(1.)),
                     ..default()
                 },
