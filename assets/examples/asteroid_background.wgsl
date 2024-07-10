@@ -1,6 +1,6 @@
 #import noisy_bevy::fbm_simplex_2d_seeded
 #import bevy_sprite::mesh2d_functions::{
-    get_model_matrix,
+    get_world_from_local,
     mesh2d_position_local_to_clip,
 }
 
@@ -25,7 +25,7 @@ struct VertexOutput {
 fn vertex(vertex: Vertex) -> VertexOutput {
     var out: VertexOutput;
     // Project the world position of the mesh into screen position
-    let model = get_model_matrix(vertex.instance_index);
+    let model = get_world_from_local(vertex.instance_index);
     out.clip_position = mesh2d_position_local_to_clip(model, vec4<f32>(vertex.position, 1.0));
     out.object_position = vertex.position.xy;
     return out;
