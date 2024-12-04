@@ -16,9 +16,16 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    let mut cam = Camera2dBundle::default();
-    cam.projection.scaling_mode = ScalingMode::FixedVertical(70.);
-    commands.spawn((cam, PanCam::default()));
+    commands.spawn((
+        Camera2d,
+        OrthographicProjection {
+            scaling_mode: ScalingMode::FixedVertical {
+                viewport_height: 70.0,
+            },
+            ..OrthographicProjection::default_2d()
+        },
+        PanCam::default(),
+    ));
 
     const FREQUENCY_SCALE: f32 = 0.05;
     const AMPLITUDE_SCALE: f32 = 4.0;
@@ -40,15 +47,14 @@ fn setup(mut commands: Commands) {
             let height = RADIUS + offset - ((x * x + y * y) as f32).sqrt();
 
             // spawn a corresponding tile with a color thats more white the higher the height
-            commands.spawn(SpriteBundle {
-                sprite: Sprite {
+            commands.spawn((
+                Sprite {
                     color: Color::WHITE.with_luminance(height * 0.03),
                     custom_size: Some(Vec2::splat(1.)),
                     ..default()
                 },
-                transform: Transform::from_translation(Vec3::new(x as f32, y as f32, 100.)),
-                ..default()
-            });
+                Transform::from_translation(Vec3::new(x as f32, y as f32, 100.)),
+            ));
         }
     }
 }
