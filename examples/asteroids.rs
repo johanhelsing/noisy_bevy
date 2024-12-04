@@ -2,7 +2,7 @@ use bevy::{
     math::{vec2, vec4},
     prelude::*,
     render::{camera::ScalingMode, render_resource::AsBindGroup},
-    sprite::{Material2d, Material2dPlugin, MaterialMesh2dBundle},
+    sprite::{Material2d, Material2dPlugin},
 };
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
@@ -15,7 +15,7 @@ fn main() {
         .add_plugins((
             DefaultPlugins,
             NoisyShaderPlugin,
-            PanCamPlugin::default(),
+            PanCamPlugin,
             Material2dPlugin::<AsteroidBackgroundMaterial>::default(),
             // WorldInspectorPlugin::new()
         ))
@@ -25,10 +25,16 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    let mut cam = Camera2dBundle::default();
-    cam.projection.scaling_mode = ScalingMode::FixedVertical(50.);
-
-    commands.spawn((cam, PanCam::default()));
+    commands.spawn((
+        Camera2d,
+        OrthographicProjection {
+            scaling_mode: ScalingMode::FixedVertical {
+                viewport_height: 70.0,
+            },
+            ..OrthographicProjection::default_2d()
+        },
+        PanCam::default(),
+    ));
 
     commands.spawn(AsteroidBundle::default());
 }
@@ -113,17 +119,14 @@ fn expand_asteroids(
                     // let o = noisy_bevy::fbm_simplex_2d(p * params.frequency_scale, 3, 2., 0.5)
                     //     * params.amplitude_scale;
                     if ((x * x + y * y) as f32) < (params.radius + o).powi(2) {
-                        asteroid.spawn(SpriteBundle {
-                            sprite: Sprite {
+                        asteroid.spawn((
+                            Sprite {
                                 color: Color::WHITE.with_luminance(0.2),
                                 custom_size: Some(Vec2::splat(1.)),
                                 ..default()
                             },
-                            transform: Transform::from_translation(Vec3::new(
-                                x as f32, y as f32, 100.,
-                            )),
-                            ..default()
-                        });
+                            Transform::from_translation(Vec3::new(x as f32, y as f32, 100.)),
+                        ));
                     }
                 }
             }
@@ -141,15 +144,11 @@ fn expand_asteroids(
 
             let quad_handle = meshes.add(Mesh::from(Rectangle::from_size(Vec2::new(100.0, 100.0))));
 
-            asteroid.spawn(MaterialMesh2dBundle {
-                mesh: quad_handle.into(),
-                material: material_handle,
-                transform: Transform {
-                    translation: Vec3::new(0.0, 0.0, 1.5),
-                    ..default()
-                },
-                ..default()
-            });
+            asteroid.spawn((
+                Mesh2d(quad_handle),
+                MeshMaterial2d(material_handle),
+                Transform::from_translation(Vec3::new(0.0, 0.0, 1.5)),
+            ));
         });
     }
 }
