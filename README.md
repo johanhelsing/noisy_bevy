@@ -4,16 +4,12 @@
 ![MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 [![docs.rs](https://img.shields.io/docsrs/noisy_bevy)](https://docs.rs/noisy_bevy)
 
-Simple stupid noise primitives for glam types (`Vec2`, `Vec3`) and wgsl.
+Simple stupid noise primitives for glam (`Vec2`, `Vec3`) and WGSL.
 
-Main motivations are:
+- Integrates with Bevy seamlessly
+- Same results on the CPU and GPU (not bit-level perfect, though)
 
-- ergonomic usage with Bevy
-- same results on rust and wgsl (not bit-level perfect, though)
-
-![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
-
-## Implemented noise primitives
+## Features
 
 - `simplex_noise_2d`
 - `simplex_noise_2d_seeded`
@@ -23,9 +19,11 @@ Main motivations are:
 - `fbm_simplex_3d`
 - `worley_2d`
 
+![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
+
 ## Usage
 
-### From rust
+### From Rust
 
 Zero initialization, just call the noise functions:
 
@@ -37,7 +35,7 @@ let p = Vec2::new(12.3, 45.6);
 let value = simplex_noise_2d(p);
 ```
 
-### From wgsl shaders
+### From WGSL shaders
 
 First add the plugin to the Bevy app:
 
@@ -46,7 +44,7 @@ App::new()
     .add_plugins(NoisyShaderPlugin)
 ```
 
-And import it and use it in your shaders, with the same API as on the CPU-side:
+Then use it in your shaders:
 
 ```wgsl
 #import noisy_bevy::simplex_noise_2d
@@ -86,6 +84,7 @@ The noise primitives are ports/copies of these
 
 - <https://github.com/stegu/psrdnoise>
 - <https://gist.github.com/munrocket/236ed5ba7e409b8bdf1ff6eca5dcdc39>
+- <https://github.com/bevy-interstellar/wgsl_noise>
 
 ## Contributions
 
