@@ -301,11 +301,11 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
 pub fn worley_noise_2d(v: Vec2) -> Vec2 {
     const K: f32 = 1.0 / 7.0;
     const KO: f32 = 3.0 / 7.0;
-    let jitter = 0.7;
+    let jitter = 1.0;
 
     // Determine the grid cell and fractional position
     let pi = v.floor() % 289.0;
-    let pf = v.fract();
+    let pf = v - v.floor();
 
     // Define offset indices for neighboring grid cells
     let oi = vec3(-1.0, 0.0, 1.0);
@@ -319,15 +319,21 @@ pub fn worley_noise_2d(v: Vec2) -> Vec2 {
     let p2 = permute_3(px.y + pi.y + oi);
     let p3 = permute_3(px.z + pi.y + oi);
 
+    // specifically, if the code is using fract(x) it should probably be using x - floor(x) instead
+
+    let p1k = p1 * K;
+    let p2k = p2 * K;
+    let p3k = p3 * K;
+
     // Calculate ox and oy for each p
-    let ox1 = (p1 * K).fract() - KO;
-    let oy1 = (p1 * K).floor() % 7.0 * K - KO;
+    let ox1 = p1k - p1k.floor() - KO;
+    let oy1 = (p1k.floor() % 7.0) * K - KO;
 
-    let ox2 = (p2 * K).fract() - KO;
-    let oy2 = (p2 * K).floor() % 7.0 * K - KO;
+    let ox2 = p2k - p2k.floor() - KO;
+    let oy2 = (p2k.floor() % 7.0) * K - KO;
 
-    let ox3 = (p3 * K).fract() - KO;
-    let oy3 = (p3 * K).floor() % 7.0 * K - KO;
+    let ox3 = p3k - p3k.floor() - KO;
+    let oy3 = (p3k.floor() % 7.0) * K - KO;
 
     // Calculate dx and dy for each p
     let dx1 = Vec3::splat(pf.x + 0.5) + jitter * ox1;
