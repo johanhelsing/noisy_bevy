@@ -297,6 +297,68 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
     sum
 }
 
+/// Also called Voronoi or cellular noise
+pub fn worley_noise_2d(v: Vec2) -> Vec2 {
+    const K: f32 = 1.0 / 7.0;
+    const KO: f32 = 3.0 / 7.0;
+    let jitter = 0.7;
+
+    // Determine the grid cell and fractional position
+    let pi = v.floor() % 289.0;
+    let pf = v.fract();
+
+    // Define offset indices for neighboring grid cells
+    let oi = vec3(-1.0, 0.0, 1.0);
+    let of_ = vec3(-0.5, 0.5, 1.5);
+
+    // Permute the grid cell indices to get unique values for each cell
+    let px = permute_3(pi.x + oi);
+
+    // Permute for p1, p2, p3
+    let p1 = permute_3(px.x + pi.y + oi);
+    let p2 = permute_3(px.y + pi.y + oi);
+    let p3 = permute_3(px.z + pi.y + oi);
+
+    // Calculate ox and oy for each p
+    let ox1 = (p1 * K).fract() - KO;
+    let oy1 = (p1 * K).floor() % 7.0 * K - KO;
+
+    let ox2 = (p2 * K).fract() - KO;
+    let oy2 = (p2 * K).floor() % 7.0 * K - KO;
+
+    let ox3 = (p3 * K).fract() - KO;
+    let oy3 = (p3 * K).floor() % 7.0 * K - KO;
+
+    // Calculate dx and dy for each p
+    let dx1 = Vec3::splat(pf.x + 0.5) + jitter * ox1;
+    let dy1 = Vec3::splat(pf.y) - of_ + jitter * oy1;
+    let d1 = dx1 * dx1 + dy1 * dy1;
+
+    let dx2 = Vec3::splat(pf.x - 0.5) + jitter * ox2;
+    let dy2 = Vec3::splat(pf.y) - of_ + jitter * oy2;
+    let d2 = dx2 * dx2 + dy2 * dy2;
+
+    let dx3 = Vec3::splat(pf.x - 1.5) + jitter * ox3;
+    let dy3 = Vec3::splat(pf.y) - of_ + jitter * oy3;
+    let d3 = dx3 * dx3 + dy3 * dy3;
+
+    // Find F1
+    let mut d1_min = Vec3::min(d1, d2);
+    d1_min = Vec3::min(d1_min, d3);
+    d1_min.x = d1_min.x.min(d1_min.y).min(d1_min.z);
+    let f1 = d1_min.x.sqrt();
+
+    // Find F2
+    let mut d2_candidates = Vec3::max(d1, d2);
+    d2_candidates = Vec3::min(d2_candidates, d3);
+    d1_min.y = d1_min.y.min(d2_candidates.y);
+    d1_min.y = d1_min.y.min(d2_candidates.z);
+    d1_min.y = d1_min.y.min(d2_candidates.x);
+    let f2 = d1_min.y.sqrt();
+
+    vec2(f1, f2)
+}
+
 #[cfg(test)]
 mod test {
     use super::*;

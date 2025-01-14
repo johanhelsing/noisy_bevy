@@ -210,3 +210,57 @@ fn fbm_simplex_3d(pos: vec3<f32>, octaves: i32, lacunarity: f32, gain: f32) -> f
 
     return sum;
 }
+
+// Ported from https://github.com/bevy-interstellar/wgsl_noise
+fn worley_2d(pos vec2<f32>) -> vec2<f32> {
+    let k = 0.142857142857;     // 1/7
+    let ko = 0.428571428571;    // 3/7
+    let jitter = 1.0;           // Controls the regularity of the pattern
+
+    // Determine the grid cell and fractional position
+    let pi = floor(pos);
+    let pf = fract(pos);
+
+    // Define offset indices for neighboring grid cells
+    let oi = vec3(-1.0, 0.0, 1.0);
+    let of_ = vec3(-0.5, 0.5, 1.5);
+
+    // Permute the grid cell indices to get unique values for each cell
+    let px = permute_3_(pi.x + oi);
+    var p = permute_3_(px.x + pi.y + oi);  // p11, p12, p13
+    var ox = fract(p * k) - ko;
+    var oy = (floor(p * k) % 7.0) * k - ko;
+    var dx = pf.x + 0.5 + jitter * ox;
+    var dy = pf.y - of_ + jitter * oy;
+    var d1 = dx * dx + dy * dy;     // d11, d12, d13, squared
+
+    p = permute_3_(px.y + pi.y + oi);      // p21, p22, p23
+    ox = fract(p * k) - ko;
+    oy = (floor(p * k) % 7.0) * k - ko;
+    dx = pf.x - 0.5 + jitter * ox;
+    dy = pf.y - of_ + jitter * oy;
+    var d2 = dx * dx + dy * dy;     // d21, d22, d23, squared
+
+    p = permute_3_(px.z + pi.y + oi);      // p31, p32, p33
+    ox = fract(p * k) - ko;
+    oy = (floor(p * k) % 7.0) * k - ko;
+    dx = pf.x - 1.5 + jitter * ox;
+    dy = pf.y - of_ + jitter * oy;
+    let d3 = dx * dx + dy * dy;     // d31, d32, d33, squared
+
+    // Find the two smallest distances (F1 and F2)
+    d1 = min(d1, d2);
+    d1 = min(d1, d3);
+    d1.x = min(d1.x, d1.y);
+    d1.x = min(d1.x, d1.z);
+
+    d2 = max(d1, d2);               // Swap to keep candidates for F2
+    d2 = min(d2, d3);               // neither F1 nor F2 are now in d3
+    d1.y = min(d1.y, d2.y);         // F2 is now in d1.y
+    d1.y = min(d1.y, d2.z);
+    d1.y = min(d1.y, d2.x);
+
+    // Return the square roots of F1 and F2
+    return sqrt(d1.xy);
+}
+
