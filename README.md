@@ -13,7 +13,7 @@ Main motivations are:
 
 ![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
 
-## Implemented noise primitives:
+## Implemented noise primitives
 
 - `simplex_noise_2d`
 - `simplex_noise_2d_seeded`
