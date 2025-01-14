@@ -15,12 +15,13 @@ Main motivations are:
 
 ## Implemented noise primitives:
 
-- [`simplex_noise_2d`]
-- [`simplex_noise_2d_seeded`]
-- [`simplex_noise_3d`]
-- [`fbm_simplex_2d`]
-- [`fbm_simplex_2d_seeded`]
-- [`fbm_simplex_3d`]
+- `simplex_noise_2d`
+- `simplex_noise_2d_seeded`
+- `simplex_noise_3d`
+- `fbm_simplex_2d`
+- `fbm_simplex_2d_seeded`
+- `fbm_simplex_3d`
+- `worley_2d`
 
 ## Usage
 
