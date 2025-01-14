@@ -35,12 +35,11 @@ fn vertex(vertex: Vertex) -> VertexOutput {
 fn fragment(
     vertex_output: VertexOutput,
 ) -> @location(0) vec4<f32> {
-    var pos = vertex_output.object_position;
     let params = material.params;
     let freq_scale = params.x;
     let amp_scale = params.y;
 
-    let worley_value = worley_2d(pos * freq_scale) * amp_scale;
+    let worley_value = worley_2d(vertex_output.clip_position.xy * freq_scale) * amp_scale;
     let value = worley_value.x;
 
     return vec4(value, value, value, 1.);

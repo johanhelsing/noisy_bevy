@@ -15,6 +15,7 @@ fn main() {
             Material2dPlugin::<BackgroundMaterial>::default(),
         ))
         .add_systems(Startup, setup)
+        .add_systems(Update, follow_mouse)
         .run();
 }
 
@@ -48,17 +49,39 @@ fn setup(
         },
     ));
 
-    let frequency_scale = 0.1;
+    let frequency_scale = 0.005;
     let amplitude_scale = 1.0;
 
     let material_handle = materials.add(BackgroundMaterial {
         params: vec2(frequency_scale, amplitude_scale),
     });
-    let mesh_handle = meshes.add(Mesh::from(Rectangle::from_size(Vec2::new(1000.0, 1000.0))));
+    let mesh_handle = meshes.add(Mesh::from(Rectangle::from_size(Vec2::new(100.0, 100.0))));
 
     commands.spawn((
         Transform::default(),
         Mesh2d(mesh_handle),
         MeshMaterial2d(material_handle),
+        FollowMouse,
     ));
+}
+
+#[derive(Component)]
+struct FollowMouse;
+
+fn follow_mouse(
+    windows: Query<&Window>,
+    camera_query: Query<(&Camera, &GlobalTransform), With<Camera2d>>,
+    mut followers_query: Query<&mut Transform, (With<FollowMouse>, Without<Camera>)>,
+) {
+    let window = windows.single();
+    let (camera, camera_transform) = camera_query.single();
+
+    if let Some(cursor_position) = window
+        .cursor_position()
+        .and_then(|cursor| camera.viewport_to_world_2d(camera_transform, cursor).ok())
+    {
+        for mut transform in &mut followers_query {
+            *transform = Transform::from_translation(cursor_position.extend(0.0));
+        }
+    }
 }
