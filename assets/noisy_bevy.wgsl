@@ -212,7 +212,7 @@ fn fbm_simplex_3d(pos: vec3<f32>, octaves: i32, lacunarity: f32, gain: f32) -> f
 }
 
 // Ported from https://github.com/bevy-interstellar/wgsl_noise
-fn worley_2d(pos vec2<f32>) -> vec2<f32> {
+fn worley_2d(pos: vec2<f32>) -> vec2<f32> {
     let k = 0.142857142857;     // 1/7
     let ko = 0.428571428571;    // 3/7
     let jitter = 1.0;           // Controls the regularity of the pattern

@@ -298,14 +298,14 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
 }
 
 /// Also called Voronoi or cellular noise
-pub fn worley_noise_2d(v: Vec2) -> Vec2 {
+pub fn worley_noise_2d(pos: Vec2) -> Vec2 {
     const K: f32 = 1.0 / 7.0;
     const KO: f32 = 3.0 / 7.0;
     let jitter = 1.0;
 
     // Determine the grid cell and fractional position
-    let pi = v.floor() % 289.0;
-    let pf = v.fract_gl();
+    let pi = pos.floor() % 289.0;
+    let pf = pos.fract_gl();
 
     // Define offset indices for neighboring grid cells
     let oi = vec3(-1.0, 0.0, 1.0);
@@ -428,4 +428,21 @@ mod test {
     fn fbm_3d_values_unchanged() {
         assert_debug_snapshot!(sample_3d_fn(|p| { fbm_simplex_3d(p, 5, 2.0, 0.5) }));
     }
+
+    // Enable for seeded version
+    // #[test]
+    // fn worley_2d_values_unchanged() {
+    //     assert_debug_snapshot!({
+    //         let mut values = Vec::new();
+    //         for x in -20..20 {
+    //             let x = x as f32 / 10.;
+    //             for y in -20..20 {
+    //                 let y = y as f32 / 10.;
+    //                 let v = worley_noise_2d(vec2(x, y));
+    //                 values.push(v);
+    //             }
+    //         }
+    //         values
+    //     });
+    // }
 }
