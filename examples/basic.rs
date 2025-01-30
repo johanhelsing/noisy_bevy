@@ -33,6 +33,7 @@ fn setup(mut commands: Commands) {
     const OCTAVES: usize = 3;
     const LACUNARITY: f32 = 2.;
     const GAIN: f32 = 0.5;
+    const NORMALIZE: bool = false;
 
     let grid_half_size = RADIUS as i32 + 1;
 
@@ -42,7 +43,7 @@ fn setup(mut commands: Commands) {
 
             // this is the whole point of the example
             let offset =
-                fbm_simplex_2d(p * FREQUENCY_SCALE, OCTAVES, LACUNARITY, GAIN) * AMPLITUDE_SCALE;
+                fbm_simplex_2d(p * FREQUENCY_SCALE, OCTAVES, LACUNARITY, GAIN, NORMALIZE) * AMPLITUDE_SCALE;
 
             let height = RADIUS + offset - ((x * x + y * y) as f32).sqrt();
 

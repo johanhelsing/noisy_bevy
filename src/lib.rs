@@ -247,18 +247,30 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
 }
 
 /// Fractional brownian motion (fbm) based on 2d simplex noise
-pub fn fbm_simplex_2d(pos: Vec2, octaves: usize, lacunarity: f32, gain: f32) -> f32 {
+pub fn fbm_simplex_2d(
+    pos: Vec2,
+    octaves: usize,
+    lacunarity: f32,
+    gain: f32,
+    normalize: bool,
+) -> f32 {
     let mut sum = 0.;
     let mut amplitude = 1.;
+    let mut max_amplitude = 1.;
     let mut frequency = 1.;
 
     for _ in 0..octaves {
         sum += simplex_noise_2d(pos * frequency) * amplitude;
+        max_amplitude += amplitude;
         amplitude *= gain;
         frequency *= lacunarity;
     }
 
-    sum
+    if normalize {
+        0.5 * sum / max_amplitude + 0.5
+    } else {
+        sum
+    }
 }
 
 /// Fractional brownian motion (fbm) based on seeded 2d simplex noise
@@ -268,33 +280,52 @@ pub fn fbm_simplex_2d_seeded(
     lacunarity: f32,
     gain: f32,
     seed: f32,
+    normalize: bool,
 ) -> f32 {
     let mut sum = 0.;
     let mut amplitude = 1.;
+    let mut max_amplitude = 1.;
     let mut frequency = 1.;
 
     for _ in 0..octaves {
         sum += simplex_noise_2d_seeded(pos * frequency, seed) * amplitude;
+        max_amplitude += amplitude;
         amplitude *= gain;
         frequency *= lacunarity;
     }
 
-    sum
+    if normalize {
+        0.5 * sum / max_amplitude + 0.5
+    } else {
+        sum
+    }
 }
 
 /// Fractional brownian motion (fbm) based on 3d simplex noise
-pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> f32 {
+pub fn fbm_simplex_3d(
+    pos: Vec3,
+    octaves: usize,
+    lacunarity: f32,
+    gain: f32,
+    normalize: bool,
+) -> f32 {
     let mut sum = 0.;
     let mut amplitude = 1.;
+    let mut max_amplitude = 1.;
     let mut frequency = 1.;
 
     for _ in 0..octaves {
         sum += simplex_noise_3d(pos * frequency) * amplitude;
+        max_amplitude += amplitude;
         amplitude *= gain;
         frequency *= lacunarity;
     }
 
-    sum
+    if normalize {
+        0.5 * sum / max_amplitude + 0.5
+    } else {
+        sum
+    }
 }
 
 #[cfg(test)]
@@ -349,21 +380,21 @@ mod test {
 
     #[test]
     fn fbm_2d_values_unchanged() {
-        assert_debug_snapshot!(sample_2d_fn(|p| { fbm_simplex_2d(p, 5, 2.0, 0.5) }));
+        assert_debug_snapshot!(sample_2d_fn(|p| { fbm_simplex_2d(p, 5, 2.0, 0.5, false) }));
     }
 
     #[test]
     fn fbm_2d_seeded_values_unchanged() {
         assert_debug_snapshot!(sample_2d_fn(|p| {
-            fbm_simplex_2d_seeded(p, 5, 2.0, 0.5, 0.0)
+            fbm_simplex_2d_seeded(p, 5, 2.0, 0.5, 0.0, false)
         }));
         assert_debug_snapshot!(sample_2d_fn(|p| {
-            fbm_simplex_2d_seeded(p, 5, 2.0, 0.5, 123.0)
+            fbm_simplex_2d_seeded(p, 5, 2.0, 0.5, 123.0, false)
         }));
     }
 
     #[test]
     fn fbm_3d_values_unchanged() {
-        assert_debug_snapshot!(sample_3d_fn(|p| { fbm_simplex_3d(p, 5, 2.0, 0.5) }));
+        assert_debug_snapshot!(sample_3d_fn(|p| { fbm_simplex_3d(p, 5, 2.0, 0.5, false) }));
     }
 }
