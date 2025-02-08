@@ -298,6 +298,7 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
 }
 
 /// Cellular noise
+#[allow(clippy::manual_swap)] // Allow to support no_std
 pub fn worley_2d(pos: Vec2, jitter: f32) -> Vec2 {
     const K: f32 = 1.0 / 7.0;
     const KO: f32 = 3.0 / 7.0;
