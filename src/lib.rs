@@ -298,7 +298,6 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
 }
 
 /// Cellular noise
-#[allow(clippy::manual_swap)] // Allow to support no_std
 pub fn worley_2d(pos: Vec2, jitter: f32) -> Vec2 {
     const K: f32 = 1.0 / 7.0;
     const KO: f32 = 3.0 / 7.0;
@@ -343,15 +342,11 @@ pub fn worley_2d(pos: Vec2, jitter: f32) -> Vec2 {
     d2 = d1a.max(d2);
 
     if d1.x > d1.y {
-        let tmp = d1.x;
-        d1.x = d1.y;
-        d1.y = tmp;
+        core::mem::swap(&mut d1.x, &mut d1.y);
     }
 
     if d1.x > d1.z {
-        let tmp = d1.x;
-        d1.x = d1.z;
-        d1.z = tmp;
+        core::mem::swap(&mut d1.x, &mut d1.z);
     }
 
     d1.y = d1.y.min(d2.y);
