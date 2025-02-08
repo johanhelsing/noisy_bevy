@@ -297,14 +297,13 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
     sum
 }
 
-/// Also called Voronoi or cellular noise
-pub fn worley_noise_2d(pos: Vec2) -> Vec2 {
+/// Cellular noise
+pub fn worley_2d(pos: Vec2, jitter: f32) -> Vec2 {
     const K: f32 = 1.0 / 7.0;
     const KO: f32 = 3.0 / 7.0;
-    let jitter = 1.0;
 
     // Determine the grid cell and fractional position
-    let pi = pos.floor() % 289.0;
+    let pi = pos.floor();
     let pf = pos.fract_gl();
 
     // Define offset indices for neighboring grid cells
@@ -313,50 +312,53 @@ pub fn worley_noise_2d(pos: Vec2) -> Vec2 {
 
     // Permute the grid cell indices to get unique values for each cell
     let px = permute_3(pi.x + oi);
+    let mut p = permute_3(px.x + pi.y + oi); // p11, p12, p13
 
-    // Permute for p1, p2, p3
-    let p1 = permute_3(px.x + pi.y + oi);
-    let p2 = permute_3(px.y + pi.y + oi);
-    let p3 = permute_3(px.z + pi.y + oi);
+    let mut ox = (p * K).fract_gl() - KO;
+    let mut oy = (p * K).floor() % 7.0 * K - KO;
+    let mut dx = pf.x + 0.5 + jitter * ox;
+    let mut dy = pf.y - of_ + jitter * oy;
+    let mut d1 = dx * dx + dy * dy;
 
-    // Calculate ox and oy for each p
-    let ox1 = (p1 * K).fract_gl() - KO;
-    let oy1 = (p1 * K).floor() % 7.0 * K - KO;
+    p = permute_3(px.y + pi.y + oi); // p21, p22, p23
+    ox = (p * K).fract_gl() - KO;
+    oy = ((p * K).floor() % 7.0) * K - KO;
+    dx = pf.x - 0.5 + jitter * ox;
+    dy = pf.y - of_ + jitter * oy;
+    let mut d2 = dx * dx + dy * dy; // d21, d22, d23, squared
 
-    let ox2 = (p2 * K).fract_gl() - KO;
-    let oy2 = (p2 * K).floor() % 7.0 * K - KO;
+    p = permute_3(px.z + pi.y + oi); // p31, p32, p33
+    ox = (p * K).fract_gl() - KO;
+    oy = ((p * K).floor() % 7.0) * K - KO;
+    dx = pf.x - 1.5 + jitter * ox;
+    dy = pf.y - of_ + jitter * oy;
+    let d3 = dx * dx + dy * dy; // d31, d32, d33, squared
 
-    let ox3 = (p3 * K).fract_gl() - KO;
-    let oy3 = (p3 * K).floor() % 7.0 * K - KO;
+    // Find the two smallest distances (F1 and F2)
+    let d1a = d1.min(d2);
+    d2 = d1.max(d2);
+    d2 = d2.min(d3);
+    d1 = d1a.min(d2);
+    d2 = d1a.max(d2);
 
-    // Calculate dx and dy for each p
-    let dx1 = Vec3::splat(pf.x + 0.5) + jitter * ox1;
-    let dy1 = Vec3::splat(pf.y) - of_ + jitter * oy1;
-    let d1 = dx1 * dx1 + dy1 * dy1;
+    if d1.x > d1.y {
+        let tmp = d1.x;
+        d1.x = d1.y;
+        d1.y = tmp;
+    }
 
-    let dx2 = Vec3::splat(pf.x - 0.5) + jitter * ox2;
-    let dy2 = Vec3::splat(pf.y) - of_ + jitter * oy2;
-    let d2 = dx2 * dx2 + dy2 * dy2;
+    if d1.x > d1.z {
+        let tmp = d1.x;
+        d1.x = d1.z;
+        d1.z = tmp;
+    }
 
-    let dx3 = Vec3::splat(pf.x - 1.5) + jitter * ox3;
-    let dy3 = Vec3::splat(pf.y) - of_ + jitter * oy3;
-    let d3 = dx3 * dx3 + dy3 * dy3;
+    d1.y = d1.y.min(d2.y);
+    d1.z = d1.z.min(d2.z);
+    d1.y = d1.y.min(d1.z);
+    d1.y = d1.y.min(d2.x);
 
-    // Find F1
-    let mut d1_min = Vec3::min(d1, d2);
-    d1_min = Vec3::min(d1_min, d3);
-    d1_min.x = d1_min.x.min(d1_min.y).min(d1_min.z);
-    let f1 = d1_min.x.sqrt();
-
-    // Find F2
-    let mut d2_candidates = Vec3::max(d1, d2);
-    d2_candidates = Vec3::min(d2_candidates, d3);
-    d1_min.y = d1_min.y.min(d2_candidates.y);
-    d1_min.y = d1_min.y.min(d2_candidates.z);
-    d1_min.y = d1_min.y.min(d2_candidates.x);
-    let f2 = d1_min.y.sqrt();
-
-    vec2(f1, f2)
+    vec2(d1.x.sqrt(), d1.y.sqrt())
 }
 
 #[cfg(test)]
@@ -429,20 +431,19 @@ mod test {
         assert_debug_snapshot!(sample_3d_fn(|p| { fbm_simplex_3d(p, 5, 2.0, 0.5) }));
     }
 
-    // Enable for seeded version
-    // #[test]
-    // fn worley_2d_values_unchanged() {
-    //     assert_debug_snapshot!({
-    //         let mut values = Vec::new();
-    //         for x in -20..20 {
-    //             let x = x as f32 / 10.;
-    //             for y in -20..20 {
-    //                 let y = y as f32 / 10.;
-    //                 let v = worley_noise_2d(vec2(x, y));
-    //                 values.push(v);
-    //             }
-    //         }
-    //         values
-    //     });
-    // }
+    #[test]
+    fn worley_2d_values_unchanged() {
+        assert_debug_snapshot!({
+            let mut values = Vec::new();
+            for x in -20..20 {
+                let x = x as f32 / 10.;
+                for y in -20..20 {
+                    let y = y as f32 / 10.;
+                    let v = worley_2d(vec2(x, y), 1.0);
+                    values.push(v);
+                }
+            }
+            values
+        });
+    }
 }

@@ -1,5 +1,5 @@
 use bevy::{math::vec2, prelude::*, render::camera::ScalingMode};
-use noisy_bevy::worley_noise_2d;
+use noisy_bevy::worley_2d;
 
 fn main() {
     App::new()
@@ -23,11 +23,12 @@ fn setup(mut commands: Commands) {
 
     let grid_half_size = 100;
     let frequency_scale = 0.1;
+    let jitter = 1.0;
 
     for x in -grid_half_size..grid_half_size {
         for y in -grid_half_size..grid_half_size {
             let position = vec2(x as f32, y as f32);
-            let value = worley_noise_2d(position * frequency_scale);
+            let value = worley_2d(position * frequency_scale, jitter);
             let luminance = value.x;
 
             commands.spawn((
