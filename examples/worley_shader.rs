@@ -50,7 +50,7 @@ fn setup(
     ));
 
     let material_handle = materials.add(NoiseMaterial {
-        frequency_scale: 0.02,
+        frequency_scale: 0.05,
         amplitude_scale: 1.0,
     });
     let mesh_handle = meshes.add(Mesh::from(Rectangle::from_size(Vec2::new(200.0, 200.0))));

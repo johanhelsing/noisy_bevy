@@ -22,7 +22,7 @@ fn setup(mut commands: Commands) {
     ));
 
     let grid_half_size = 100;
-    let frequency_scale = 0.1;
+    let frequency_scale = 0.05;
     let jitter = 1.0;
 
     for x in -grid_half_size..grid_half_size {
