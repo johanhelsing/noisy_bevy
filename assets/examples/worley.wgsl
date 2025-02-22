@@ -36,7 +36,7 @@ fn vertex(vertex: VertexInput) -> VertexOutput {
 fn fragment(
     in: VertexOutput,
 ) -> @location(0) vec4<f32> {
-    let position = in.clip_position.xy * material.frequency_scale;
+    let position = in.object_position * material.frequency_scale;
     let jitter = 1.0;
     let worley = worley_2d(position, jitter) * material.amplitude_scale;
     
