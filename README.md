@@ -11,13 +11,13 @@ Simple stupid noise primitives for glam (`Vec2`, `Vec3`) and WGSL.
 
 ## Features
 
-- `simplex_noise_2d`
-- `simplex_noise_2d_seeded`
-- `simplex_noise_3d`
-- `fbm_simplex_2d`
-- `fbm_simplex_2d_seeded`
-- `fbm_simplex_3d`
-- `worley_2d`
+- [`simplex_noise_2d`]
+- [`simplex_noise_2d_seeded`]
+- [`simplex_noise_3d`]
+- [`fbm_simplex_2d`]
+- [`fbm_simplex_2d_seeded`]
+- [`fbm_simplex_3d`]
+- [`worley_2d`]
 
 ![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
 
