@@ -297,6 +297,66 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
     sum
 }
 
+/// Cellular noise
+pub fn worley_2d(pos: Vec2, jitter: f32) -> Vec2 {
+    const K: f32 = 1.0 / 7.0;
+    const KO: f32 = 3.0 / 7.0;
+
+    // Determine the grid cell and fractional position
+    let pi = pos.floor();
+    let pf = pos.fract_gl();
+
+    // Define offset indices for neighboring grid cells
+    let oi = vec3(-1.0, 0.0, 1.0);
+    let of_ = vec3(-0.5, 0.5, 1.5);
+
+    // Permute the grid cell indices to get unique values for each cell
+    let px = permute_3(pi.x + oi);
+    let mut p = permute_3(px.x + pi.y + oi); // p11, p12, p13
+
+    let mut ox = (p * K).fract_gl() - KO;
+    let mut oy = (p * K).floor() % 7.0 * K - KO;
+    let mut dx = pf.x + 0.5 + jitter * ox;
+    let mut dy = pf.y - of_ + jitter * oy;
+    let mut d1 = dx * dx + dy * dy;
+
+    p = permute_3(px.y + pi.y + oi); // p21, p22, p23
+    ox = (p * K).fract_gl() - KO;
+    oy = ((p * K).floor() % 7.0) * K - KO;
+    dx = pf.x - 0.5 + jitter * ox;
+    dy = pf.y - of_ + jitter * oy;
+    let mut d2 = dx * dx + dy * dy; // d21, d22, d23, squared
+
+    p = permute_3(px.z + pi.y + oi); // p31, p32, p33
+    ox = (p * K).fract_gl() - KO;
+    oy = ((p * K).floor() % 7.0) * K - KO;
+    dx = pf.x - 1.5 + jitter * ox;
+    dy = pf.y - of_ + jitter * oy;
+    let d3 = dx * dx + dy * dy; // d31, d32, d33, squared
+
+    // Find the two smallest distances (F1 and F2)
+    let d1a = d1.min(d2);
+    d2 = d1.max(d2);
+    d2 = d2.min(d3);
+    d1 = d1a.min(d2);
+    d2 = d1a.max(d2);
+
+    if d1.x > d1.y {
+        core::mem::swap(&mut d1.x, &mut d1.y);
+    }
+
+    if d1.x > d1.z {
+        core::mem::swap(&mut d1.x, &mut d1.z);
+    }
+
+    d1.y = d1.y.min(d2.y);
+    d1.z = d1.z.min(d2.z);
+    d1.y = d1.y.min(d1.z);
+    d1.y = d1.y.min(d2.x);
+
+    vec2(d1.x.sqrt(), d1.y.sqrt())
+}
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -365,5 +425,21 @@ mod test {
     #[test]
     fn fbm_3d_values_unchanged() {
         assert_debug_snapshot!(sample_3d_fn(|p| { fbm_simplex_3d(p, 5, 2.0, 0.5) }));
+    }
+
+    #[test]
+    fn worley_2d_values_unchanged() {
+        assert_debug_snapshot!({
+            let mut values = Vec::new();
+            for x in -20..20 {
+                let x = x as f32 / 10.;
+                for y in -20..20 {
+                    let y = y as f32 / 10.;
+                    let v = worley_2d(vec2(x, y), 1.0);
+                    values.push(v);
+                }
+            }
+            values
+        });
     }
 }
