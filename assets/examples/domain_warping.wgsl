@@ -6,7 +6,6 @@
 #import noisy_bevy::fbm_simplex_2d_seeded
 
 struct NoiseMaterial {
-    frequency_scale: f32,
     num_warps: i32
 }
 
@@ -63,7 +62,7 @@ fn fragment(
     
     var value = fbm_simplex_2d_warp(
         position,
-        num_warps,
+        material.num_warps,
         vec2(0.4, 0.3),
         0.2,
     );

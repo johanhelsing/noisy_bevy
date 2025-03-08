@@ -20,8 +20,6 @@ fn main() {
 #[derive(Asset, AsBindGroup, Reflect, Debug, Clone)]
 struct NoiseMaterial {
     #[uniform(0)]
-    frequency_scale: f32,
-    #[uniform(0)]
     num_warps: i32,
 }
 
@@ -49,10 +47,7 @@ fn setup(
         },
     ));
 
-    let material_handle = materials.add(NoiseMaterial {
-        frequency_scale: 0.0001,
-        num_warps: 3,
-    });
+    let material_handle = materials.add(NoiseMaterial { num_warps: 3 });
     let mesh_handle = meshes.add(Mesh::from(Rectangle::from_size(Vec2::new(500.0, 500.0))));
 
     commands.spawn((
