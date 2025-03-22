@@ -293,6 +293,7 @@ pub struct WarpResult {
 
 /// A technique that distorts the position before feeding it to the noise
 /// inspired by https://iquilezles.org/articles/warp/
+#[allow(clippy::too_many_arguments)]
 pub fn fbm_simplex_2d_warp_seeded(
     pos_initial: Vec2,
     octaves: usize,
@@ -310,7 +311,13 @@ pub fn fbm_simplex_2d_warp_seeded(
     for i in 0..warp_iterations {
         pos.x += scale * warp_scale.x * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
         pos.y += scale * warp_scale.y * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
-        positions[i] = pos;
+
+        if i < 4 {
+            positions[i] = pos;
+        } else {
+            positions[3] = pos;
+        }
+
         scale *= falloff;
     }
 
