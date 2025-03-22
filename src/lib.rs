@@ -321,13 +321,14 @@ pub fn fbm_simplex_2d_warp_seeded(
         scale *= falloff;
     }
 
-    let noise_value = fbm_simplex_2d_seeded(
-        positions[warp_iterations - 1],
-        octaves,
-        lacunarity,
-        gain,
-        seed,
-    );
+    let final_pos_index = if warp_iterations <= 4 {
+        warp_iterations - 1
+    } else {
+        3
+    };
+
+    let noise_value =
+        fbm_simplex_2d_seeded(positions[final_pos_index], octaves, lacunarity, gain, seed);
 
     WarpResult {
         noise_value,
