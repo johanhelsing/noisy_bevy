@@ -18,12 +18,12 @@ fn main() {
 fn setup(mut commands: Commands) {
     commands.spawn((
         Camera2d,
-        OrthographicProjection {
+        Projection::Orthographic(OrthographicProjection {
             scaling_mode: ScalingMode::FixedVertical {
                 viewport_height: 70.0,
             },
             ..OrthographicProjection::default_2d()
-        },
+        }),
         PanCam::default(),
     ));
 

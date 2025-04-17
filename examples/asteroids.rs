@@ -27,12 +27,12 @@ fn main() {
 fn setup(mut commands: Commands) {
     commands.spawn((
         Camera2d,
-        OrthographicProjection {
+        Projection::Orthographic(OrthographicProjection {
             scaling_mode: ScalingMode::FixedVertical {
                 viewport_height: 70.0,
             },
             ..OrthographicProjection::default_2d()
-        },
+        }),
         PanCam::default(),
     ));
 
@@ -109,7 +109,7 @@ fn expand_asteroids(
     for (asteroid_entity, params) in changed_asteroids.iter() {
         let max_half_size = params.radius as i32 + 1;
 
-        commands.entity(asteroid_entity).despawn_descendants();
+        commands.entity(asteroid_entity).despawn_related::<Children>();
         commands.entity(asteroid_entity).with_children(|asteroid| {
             for x in -max_half_size..=max_half_size {
                 for y in -max_half_size..=max_half_size {

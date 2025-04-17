@@ -10,19 +10,19 @@ repository = "https://github.com/johanhelsing/noisy_bevy"
 version = "0.8.0"
 
 [dependencies]
-bevy = { version = "0.15", default-features = false, features = [
+bevy = { version = "0.16", default-features = false, features = [
     "bevy_asset",
     "bevy_render",
 ] }
 
 [dev-dependencies]
-bevy = { version = "0.15", default-features = false, features = [
+bevy = { version = "0.16", default-features = false, features = [
     "bevy_sprite",
     "bevy_winit",
     "x11",         # github actions runners don't have libxkbcommon installed, so can't use wayland
 ] }
-rand = "0.8"
-bevy_pancam = { version = "0.16", features = ["bevy_egui"] }
+rand = "0.9"
+bevy_pancam = { version = "0.18", features = ["bevy_egui"] }
 bevy_egui = { version = "0.31", default-features = false, features = [
     "default_fonts",
 ] }
