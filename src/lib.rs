@@ -2,8 +2,8 @@
 #![doc = include_str!("../README.md")]
 
 use bevy::{
-    asset::load_internal_asset,
-    math::{Vec2Swizzles, Vec3Swizzles, Vec4Swizzles, vec2, vec3, vec4},
+    asset::{load_internal_asset, weak_handle},
+    math::{vec2, vec3, vec4, Vec2Swizzles, Vec3Swizzles, Vec4Swizzles},
     prelude::*,
 };
 
@@ -29,7 +29,7 @@ impl Plugin for NoisyShaderPlugin {
 }
 
 const NOISY_SHADER_HANDLE: Handle<Shader> =
-    Handle::weak_from_u128(224136012015454690045205738992444526155);
+    weak_handle!("9e85d206-7851-41d9-a04f-c4879ddd7143");
 
 fn permute_3(x: Vec3) -> Vec3 {
     (((x * 34.) + 1.) * x) % Vec3::splat(289.)
