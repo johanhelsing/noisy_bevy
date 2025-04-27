@@ -6,7 +6,7 @@ use bevy::{
 };
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
-use noisy_bevy::{simplex_noise_2d_seeded, NoisyShaderPlugin};
+use noisy_bevy::{NoisyShaderPlugin, simplex_noise_2d_seeded};
 
 fn main() {
     App::new()

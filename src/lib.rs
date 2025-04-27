@@ -3,7 +3,7 @@
 
 use bevy::{
     asset::load_internal_asset,
-    math::{vec2, vec3, vec4, Vec2Swizzles, Vec3Swizzles, Vec4Swizzles},
+    math::{Vec2Swizzles, Vec3Swizzles, Vec4Swizzles, vec2, vec3, vec4},
     prelude::*,
 };
 
