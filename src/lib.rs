@@ -198,7 +198,7 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
     let h = 1. - x.abs() - y.abs();
 
     let b0 = vec4(x.x, x.y, y.x, y.y);
-    let b1 = vec4(x.w, x.w, y.z, y.w);
+    let b1 = vec4(x.z, x.w, y.z, y.w);
 
     let s0 = b0.floor() * 2. + 1.;
     let s1 = b1.floor() * 2. + 1.;
