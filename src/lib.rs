@@ -392,6 +392,27 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
     sum
 }
 
+/// Fractional brownian motion (fbm) based on seeded 3d simplex noise
+pub fn fbm_simplex_3d_seeded(
+    pos: Vec3,
+    octaves: usize,
+    lacunarity: f32,
+    gain: f32,
+    seed: Vec3,
+) -> f32 {
+    let mut sum = 0.;
+    let mut amplitude = 1.;
+    let mut frequency = 1.;
+
+    for _ in 0..octaves {
+        sum += simplex_noise_3d_seeded(pos * frequency, seed) * amplitude;
+        amplitude *= gain;
+        frequency *= lacunarity;
+    }
+
+    sum
+}
+
 /// Cellular noise
 pub fn worley_2d(pos: Vec2, jitter: f32) -> Vec2 {
     const K: f32 = 1.0 / 7.0;

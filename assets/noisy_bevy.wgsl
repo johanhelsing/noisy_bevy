@@ -281,6 +281,21 @@ fn fbm_simplex_3d(pos: vec3<f32>, octaves: i32, lacunarity: f32, gain: f32) -> f
     return sum;
 }
 
+/// Fractional brownian motion (fbm) based on seeded 3d simplex noise
+fn fbm_simplex_3d_seeded(pos: vec3<f32>, octaves: i32, lacunarity: f32, gain: f32, seed: vec3<f32>) -> f32 {
+    var sum = 0.;
+    var amplitude = 1.;
+    var frequency = 1.;
+
+    for (var i = 0; i < octaves; i+= 1) {
+        sum += simplex_noise_3d_seeded(pos * frequency, seed) * amplitude;
+        amplitude *= gain;
+        frequency *= lacunarity;
+    }
+
+    return sum;
+}
+
 // MIT license, ported from https://github.com/bevy-interstellar/wgsl_noise
 /// Cellular noise, lower jitter makes the patern more regular
 /// The x component (F1) of the returned result represents the distance to the nearest feature point from the input position
