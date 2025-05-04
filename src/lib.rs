@@ -198,7 +198,7 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
     let h = 1. - x.abs() - y.abs();
 
     let b0 = vec4(x.x, x.y, y.x, y.y);
-    let b1 = vec4(x.w, x.w, y.z, y.w);
+    let b1 = vec4(x.z, x.w, y.z, y.w);
 
     let s0 = b0.floor() * 2. + 1.;
     let s1 = b1.floor() * 2. + 1.;
@@ -225,7 +225,7 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
     p3 *= norm.w;
 
     // mix final noise value
-    let mut m = 0.6
+    let mut m = 0.5
         - vec4(
             Vec3::dot(x0, x0),
             Vec3::dot(x1, x1),
@@ -234,7 +234,7 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
         );
     m = Vec4::max(m, Vec4::ZERO);
     m *= m;
-    42. * Vec4::dot(
+    105. * Vec4::dot(
         m * m,
         vec4(
             Vec3::dot(p0, x0),
