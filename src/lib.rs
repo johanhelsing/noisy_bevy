@@ -377,6 +377,60 @@ pub fn fbm_simplex_2d_seeded(
     sum
 }
 
+/// The return value of the domain warping function.
+#[derive(Copy, Clone)]
+pub struct WarpResult {
+    /// The final noise value
+    pub noise_value: f32,
+    /// The history of warped coordinates. Can be useful for mixing colors.
+    pub positions: [Vec2; 4],
+}
+
+/// A technique that distorts the position before feeding it to the noise
+/// inspired by https://iquilezles.org/articles/warp/
+#[allow(clippy::too_many_arguments)]
+pub fn fbm_simplex_2d_warp_seeded(
+    pos_initial: Vec2,
+    octaves: usize,
+    lacunarity: f32,
+    gain: f32,
+    seed: f32,
+    warp_iterations: usize,
+    warp_scale: Vec2,
+    falloff: f32,
+) -> WarpResult {
+    let mut pos = pos_initial;
+    let mut scale = 1.0;
+    let mut positions = [Vec2::ZERO; 4];
+
+    for i in 0..warp_iterations {
+        pos.x += scale * warp_scale.x * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
+        pos.y += scale * warp_scale.y * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
+
+        if i < 4 {
+            positions[i] = pos;
+        } else {
+            positions[3] = pos;
+        }
+
+        scale *= falloff;
+    }
+
+    let final_pos_index = if warp_iterations <= 4 {
+        warp_iterations - 1
+    } else {
+        3
+    };
+
+    let noise_value =
+        fbm_simplex_2d_seeded(positions[final_pos_index], octaves, lacunarity, gain, seed);
+
+    WarpResult {
+        noise_value,
+        positions,
+    }
+}
+
 /// Fractional brownian motion (fbm) based on 3d simplex noise
 pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> f32 {
     let mut sum = 0.;
@@ -534,6 +588,13 @@ mod test {
     fn simplex_2d_seeded_values_unchanged() {
         assert_debug_snapshot!(sample_2d_fn(|p| simplex_noise_2d_seeded(p, 0.0)));
         assert_debug_snapshot!(sample_2d_fn(|p| simplex_noise_2d_seeded(p, 123.0)));
+    }
+
+    #[test]
+    fn fbm_2d_warp_seeded_values_unchanged() {
+        assert_debug_snapshot!(sample_2d_fn(|p| {
+            fbm_simplex_2d_warp_seeded(p, 10, 2.9, 0.4, 324.0, 3, vec2(0.4, 0.4), 0.1).noise_value
+        }));
     }
 
     #[test]
