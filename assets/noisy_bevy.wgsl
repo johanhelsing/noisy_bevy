@@ -158,10 +158,10 @@ fn simplex_noise_3d(v: vec3<f32>) -> f32 {
     p3 = p3 * norm.w;
 
     // mix final noise value
-    var m = 0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3));
+    var m = 0.5 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3));
     m = max(m, vec4(0.));
     m *= m;
-    return 42. * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
+    return 105. * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
 }
 
 // higher level concepts:
