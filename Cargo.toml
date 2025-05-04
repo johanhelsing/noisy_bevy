@@ -7,7 +7,7 @@ keywords = ["gamedev", "bevy", "noise", "pcg", "simplex_noise"]
 license = "MIT"
 name = "noisy_bevy"
 repository = "https://github.com/johanhelsing/noisy_bevy"
-version = "0.9.0"
+version = "0.10.0"
 
 [dependencies]
 bevy = { version = "0.16", default-features = false, features = [
