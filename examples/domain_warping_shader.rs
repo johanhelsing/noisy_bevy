@@ -39,12 +39,12 @@ fn setup(
 ) {
     commands.spawn((
         Camera2d,
-        OrthographicProjection {
+        Projection::Orthographic(OrthographicProjection {
             scaling_mode: ScalingMode::FixedVertical {
                 viewport_height: 230.0,
             },
             ..OrthographicProjection::default_2d()
-        },
+        }),
     ));
 
     let material_handle = materials.add(NoiseMaterial { num_warps: 5 });
