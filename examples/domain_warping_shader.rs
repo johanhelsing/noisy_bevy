@@ -47,7 +47,7 @@ fn setup(
         }),
     ));
 
-    let material_handle = materials.add(NoiseMaterial { num_warps: 5 });
+    let material_handle = materials.add(NoiseMaterial { num_warps: 4 });
     let mesh_handle = meshes.add(Mesh::from(Rectangle::from_size(Vec2::new(500.0, 500.0))));
 
     commands.spawn((
