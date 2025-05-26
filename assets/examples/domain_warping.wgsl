@@ -90,7 +90,7 @@ fn fragment(
     let color3 = mix(
         color2,
         base_color_c,
-        warp_result.positions[2].y
+        warp_result.positions[1].y
     );
 
     return color3;

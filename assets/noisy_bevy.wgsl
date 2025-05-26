@@ -200,6 +200,8 @@ const max_warp_iterations = 4; // Warping has diminishing returns due to the fal
 
 struct WarpResult {
     noise_value: f32,
+    // The history of warped coordinates, where positions[0] is the last iteration, positions[1] is second to last, etc.
+    // Can be useful for mixing colors.
     positions: array<vec2f, max_warp_iterations>
 }
 
@@ -210,14 +212,23 @@ fn fbm_simplex_2d_warp_seeded(pos_initial: vec2<f32>, octaves: i32, lacunarity: 
     var positions = array<vec2f, max_warp_iterations>();
     var pos = pos_initial;
 
-    for (var i: i32 = 0; i < warp_iterations; i++) {
+    // Clamp warp_iterations to max_warp_iterations
+    let iterations = min(warp_iterations, i32(max_warp_iterations));
+
+    for (var i: i32 = 0; i < iterations; i++) {
         pos.x += scale * warp_scale.x * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
         pos.y += scale * warp_scale.y * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
-        positions[i] = pos;
+        
+        // Store positions in reverse order for easier user access (last iteration at index 0)
+        let index = max_warp_iterations - 1 - i;
+        if (index < max_warp_iterations) {
+            positions[index] = pos;
+        }
+
         scale *= falloff;
     }
 
-    let noise_value = fbm_simplex_2d_seeded(positions[warp_iterations - 1], octaves, lacunarity, gain, seed);
+    let noise_value = fbm_simplex_2d_seeded(positions[0], octaves, lacunarity, gain, seed);
 
     return WarpResult(noise_value, positions);
 }

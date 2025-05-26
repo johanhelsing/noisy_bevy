@@ -282,13 +282,16 @@ pub fn fbm_simplex_2d_seeded(
     sum
 }
 
+const MAX_WARP_ITERATIONS: usize = 4;
+
 /// The return value of the domain warping function.
 #[derive(Copy, Clone)]
 pub struct WarpResult {
     /// The final noise value
     pub noise_value: f32,
-    /// The history of warped coordinates. Can be useful for mixing colors.
-    pub positions: [Vec2; 4],
+    /// The history of warped coordinates, where positions[0] is the last iteration, positions[1] is second to last, etc.
+    /// Can be useful for mixing colors.
+    pub positions: [Vec2; MAX_WARP_ITERATIONS],
 }
 
 /// A technique that distorts the position before feeding it to the noise
@@ -306,29 +309,22 @@ pub fn fbm_simplex_2d_warp_seeded(
 ) -> WarpResult {
     let mut pos = pos_initial;
     let mut scale = 1.0;
-    let mut positions = [Vec2::ZERO; 4];
+    let mut positions = [Vec2::ZERO; MAX_WARP_ITERATIONS];
 
     for i in 0..warp_iterations {
         pos.x += scale * warp_scale.x * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
         pos.y += scale * warp_scale.y * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
 
-        if i < 4 {
-            positions[i] = pos;
-        } else {
-            positions[3] = pos;
+        // Store positions in reverse order (last iteration at index 0)
+        let index = MAX_WARP_ITERATIONS - 1 - i;
+        if index < MAX_WARP_ITERATIONS {
+            positions[index] = pos;
         }
 
         scale *= falloff;
     }
 
-    let final_pos_index = if warp_iterations <= 4 {
-        warp_iterations - 1
-    } else {
-        3
-    };
-
-    let noise_value =
-        fbm_simplex_2d_seeded(positions[final_pos_index], octaves, lacunarity, gain, seed);
+    let noise_value = fbm_simplex_2d_seeded(positions[3], octaves, lacunarity, gain, seed);
 
     WarpResult {
         noise_value,
@@ -459,7 +455,7 @@ mod test {
     #[test]
     fn fbm_2d_warp_seeded_values_unchanged() {
         assert_debug_snapshot!(sample_2d_fn(|p| {
-            fbm_simplex_2d_warp_seeded(p, 10, 2.9, 0.4, 324.0, 3, vec2(0.4, 0.4), 0.1).noise_value
+            fbm_simplex_2d_warp_seeded(p, 10, 2.9, 0.4, 324.0, 4, vec2(0.4, 0.4), 0.1).noise_value
         }));
     }
 
