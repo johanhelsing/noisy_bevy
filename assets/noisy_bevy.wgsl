@@ -185,11 +185,11 @@ fn simplex_noise_3d_seeded(v: vec3<f32>, seed: vec3<f32>) -> f32 {
 
     // permutations
     i = i % vec3(289.);
-    let seed = floor(seed + vec3(0.5));
+    let s = floor(seed + vec3(0.5));
     let p = permute_4_(permute_4_(permute_4_(
-        i.z + vec4(0., i1.z, i2.z, 1.) + seed.z) +
-        i.y + vec4(0., i1.y, i2.y, 1.) + seed.y) +
-        i.x + vec4(0., i1.x, i2.x, 1.) + seed.x
+        i.z + vec4(0., i1.z, i2.z, 1.) + s.z) +
+        i.y + vec4(0., i1.y, i2.y, 1.) + s.y) +
+        i.x + vec4(0., i1.x, i2.x, 1.) + s.x
     );
 
     // gradients (NxN points uniformly over a square, mapped onto an octahedron)
