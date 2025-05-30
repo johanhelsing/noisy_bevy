@@ -266,6 +266,43 @@ fn fbm_simplex_2d_seeded(pos: vec2<f32>, octaves: i32, lacunarity: f32, gain: f3
     return sum;
 }
 
+const max_warp_iterations = 4; // Warping has diminishing returns due to the falloff param, so we don't need many iterations. Faloff makes it look more natural.
+
+struct WarpResult {
+    noise_value: f32,
+    // The history of warped coordinates, where positions[0] is the last iteration, positions[1] is second to last, etc.
+    // Can be useful for mixing colors.
+    positions: array<vec2f, max_warp_iterations>
+}
+
+/// A technique that distorts the position before feeding it to the noise
+/// inspired by https://iquilezles.org/articles/warp/
+fn fbm_simplex_2d_warp_seeded(pos_initial: vec2<f32>, octaves: i32, lacunarity: f32, gain: f32, seed: f32, warp_iterations: i32, warp_scale: vec2<f32>, falloff: f32) -> WarpResult {
+    var scale = 1.0;
+    var positions = array<vec2f, max_warp_iterations>();
+    var pos = pos_initial;
+
+    // Clamp warp_iterations to max_warp_iterations
+    let iterations = min(warp_iterations, i32(max_warp_iterations));
+
+    for (var i: i32 = 0; i < iterations; i++) {
+        pos.x += scale * warp_scale.x * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
+        pos.y += scale * warp_scale.y * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
+        
+        // Store positions in reverse order for easier user access (last iteration at index 0)
+        let index = max_warp_iterations - 1 - i;
+        if (index < max_warp_iterations) {
+            positions[index] = pos;
+        }
+
+        scale *= falloff;
+    }
+
+    let noise_value = fbm_simplex_2d_seeded(positions[0], octaves, lacunarity, gain, seed);
+
+    return WarpResult(noise_value, positions);
+}
+
 /// Fractional brownian motion (fbm) based on 3d simplex noise
 fn fbm_simplex_3d(pos: vec3<f32>, octaves: i32, lacunarity: f32, gain: f32) -> f32 {
     var sum = 0.;
