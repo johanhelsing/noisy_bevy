@@ -63,17 +63,18 @@ See the [`asteroids example`](https://github.com/johanhelsing/noisy_bevy/blob/ma
 
 The `main` branch targets the latest bevy release.
 
-|bevy|noisy_bevy|
-|----|----------|
-|0.16| 0.9, 0.10, main|
-|0.15| 0.8      |
-|0.14| 0.7      |
-|0.13| 0.6      |
-|0.12| 0.5      |
-|0.11| 0.4      |
-|0.10| 0.3      |
-|0.9 | 0.2      |
-|0.8 | 0.1      |
+|bevy|noisy\_bevy|
+|----|-----------|
+|0.17| 0.11, main|
+|0.16| 0.9, 0.10 |
+|0.15| 0.8       |
+|0.14| 0.7       |
+|0.13| 0.6       |
+|0.12| 0.5       |
+|0.11| 0.4       |
+|0.10| 0.3       |
+|0.9 | 0.2       |
+|0.8 | 0.1       |
 
 ## License
 
