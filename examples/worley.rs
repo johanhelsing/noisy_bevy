@@ -1,4 +1,4 @@
-use bevy::{math::vec2, prelude::*, render::camera::ScalingMode};
+use bevy::{camera::ScalingMode, math::vec2, prelude::*};
 use noisy_bevy::worley_2d;
 
 fn main() {
