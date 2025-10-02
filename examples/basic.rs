@@ -3,14 +3,14 @@
 //! Generates a simple fbm island height map on the CPU and spawns tiles
 //! with corresponding colors.
 
-use bevy::{math::vec2, prelude::*, render::camera::ScalingMode};
+use bevy::{camera::ScalingMode, math::vec2, prelude::*};
 use bevy_pancam::{PanCam, PanCamPlugin};
 use noisy_bevy::fbm_simplex_2d;
 
 fn main() {
     App::new()
         .insert_resource(ClearColor(Color::BLACK))
-        .add_plugins((DefaultPlugins, PanCamPlugin::default()))
+        .add_plugins((DefaultPlugins, PanCamPlugin))
         .add_systems(Startup, setup)
         .run();
 }

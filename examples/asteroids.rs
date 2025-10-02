@@ -1,8 +1,9 @@
 use bevy::{
+    camera::ScalingMode,
     math::{vec2, vec4},
     prelude::*,
-    render::{camera::ScalingMode, render_resource::AsBindGroup},
-    sprite::{Material2d, Material2dPlugin},
+    render::render_resource::AsBindGroup,
+    sprite_render::{Material2d, Material2dPlugin},
 };
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
@@ -46,10 +47,10 @@ struct AsteroidBackgroundMaterial {
 }
 
 impl Material2d for AsteroidBackgroundMaterial {
-    fn vertex_shader() -> bevy::render::render_resource::ShaderRef {
+    fn vertex_shader() -> bevy::shader::ShaderRef {
         "examples/asteroid_background.wgsl".into()
     }
-    fn fragment_shader() -> bevy::render::render_resource::ShaderRef {
+    fn fragment_shader() -> bevy::shader::ShaderRef {
         "examples/asteroid_background.wgsl".into()
     }
 }
