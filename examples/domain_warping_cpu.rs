@@ -1,4 +1,4 @@
-use bevy::{math::vec2, prelude::*, render::camera::ScalingMode};
+use bevy::{camera::ScalingMode, math::vec2, prelude::*};
 use noisy_bevy::fbm_simplex_2d_warp_seeded;
 
 fn main() {

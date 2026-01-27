@@ -1,7 +1,8 @@
 use bevy::{
+    camera::ScalingMode,
     prelude::*,
-    render::{camera::ScalingMode, render_resource::AsBindGroup},
-    sprite::{Material2d, Material2dPlugin},
+    render::render_resource::AsBindGroup,
+    sprite_render::{Material2d, Material2dPlugin},
 };
 use noisy_bevy::NoisyShaderPlugin;
 
@@ -24,10 +25,10 @@ struct NoiseMaterial {
 }
 
 impl Material2d for NoiseMaterial {
-    fn vertex_shader() -> bevy::render::render_resource::ShaderRef {
+    fn vertex_shader() -> bevy::shader::ShaderRef {
         "examples/domain_warping.wgsl".into()
     }
-    fn fragment_shader() -> bevy::render::render_resource::ShaderRef {
+    fn fragment_shader() -> bevy::shader::ShaderRef {
         "examples/domain_warping.wgsl".into()
     }
 }
