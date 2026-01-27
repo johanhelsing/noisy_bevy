@@ -24,4 +24,8 @@ A technique that distorts the position before feeding it to the noise, inspired 
 
 [domain_warping_shader.rs](/examples/domain_warping_shader.rs)
 
-![domain_warping.png](../images/domain_warping.png)
+![domain_warping](../images/domain_warping.webp)
+
+```sh
+cargo run --example domain_warping_shader
+```
