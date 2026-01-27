@@ -1,12 +1,13 @@
 use bevy::{
+    camera::ScalingMode,
     math::{vec2, vec4},
     prelude::*,
-    render::{camera::ScalingMode, render_resource::AsBindGroup},
-    sprite::{Material2d, Material2dPlugin},
+    render::render_resource::AsBindGroup,
+    sprite_render::{Material2d, Material2dPlugin},
 };
 // use bevy_inspector_egui::quick::WorldInspectorPlugin;
 use bevy_pancam::{PanCam, PanCamPlugin};
-use noisy_bevy::{simplex_noise_2d_seeded, NoisyShaderPlugin};
+use noisy_bevy::{NoisyShaderPlugin, simplex_noise_2d_seeded};
 
 fn main() {
     App::new()
@@ -27,12 +28,12 @@ fn main() {
 fn setup(mut commands: Commands) {
     commands.spawn((
         Camera2d,
-        OrthographicProjection {
+        Projection::Orthographic(OrthographicProjection {
             scaling_mode: ScalingMode::FixedVertical {
                 viewport_height: 70.0,
             },
             ..OrthographicProjection::default_2d()
-        },
+        }),
         PanCam::default(),
     ));
 
@@ -46,10 +47,10 @@ struct AsteroidBackgroundMaterial {
 }
 
 impl Material2d for AsteroidBackgroundMaterial {
-    fn vertex_shader() -> bevy::render::render_resource::ShaderRef {
+    fn vertex_shader() -> bevy::shader::ShaderRef {
         "examples/asteroid_background.wgsl".into()
     }
-    fn fragment_shader() -> bevy::render::render_resource::ShaderRef {
+    fn fragment_shader() -> bevy::shader::ShaderRef {
         "examples/asteroid_background.wgsl".into()
     }
 }
@@ -109,7 +110,9 @@ fn expand_asteroids(
     for (asteroid_entity, params) in changed_asteroids.iter() {
         let max_half_size = params.radius as i32 + 1;
 
-        commands.entity(asteroid_entity).despawn_descendants();
+        commands
+            .entity(asteroid_entity)
+            .despawn_related::<Children>();
         commands.entity(asteroid_entity).with_children(|asteroid| {
             for x in -max_half_size..=max_half_size {
                 for y in -max_half_size..=max_half_size {

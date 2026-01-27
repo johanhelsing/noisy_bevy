@@ -14,10 +14,12 @@ Simple stupid noise primitives for glam (`Vec2`, `Vec3`) and WGSL.
 - [`simplex_noise_2d`]
 - [`simplex_noise_2d_seeded`]
 - [`simplex_noise_3d`]
+- [`simplex_noise_3d_seeded`]
 - [`fbm_simplex_2d`]
 - [`fbm_simplex_2d_seeded`]
 - [`fbm_simplex_2d_warp_seeded`]
 - [`fbm_simplex_3d`]
+- [`fbm_simplex_3d_seeded`]
 - [`worley_2d`]
 
 ![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
@@ -63,16 +65,19 @@ See the [`asteroids example`](https://github.com/johanhelsing/noisy_bevy/blob/ma
 
 The `main` branch targets the latest bevy release.
 
-|bevy|noisy_bevy|
-|----|----------|
-|0.15| 0.8, main|
-|0.14| 0.7      |
-|0.13| 0.6      |
-|0.12| 0.5      |
-|0.11| 0.4      |
-|0.10| 0.3      |
-|0.9 | 0.2      |
-|0.8 | 0.1      |
+|bevy|noisy\_bevy|
+|----|-----------|
+|0.18| 0.13, main|
+|0.17| 0.11      |
+|0.16| 0.9, 0.10 |
+|0.15| 0.8       |
+|0.14| 0.7       |
+|0.13| 0.6       |
+|0.12| 0.5       |
+|0.11| 0.4       |
+|0.10| 0.3       |
+|0.9 | 0.2       |
+|0.8 | 0.1       |
 
 ## License
 

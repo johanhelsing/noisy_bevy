@@ -2,8 +2,8 @@
 #![doc = include_str!("../README.md")]
 
 use bevy::{
-    asset::load_internal_asset,
-    math::{vec2, vec3, vec4, Vec2Swizzles, Vec3Swizzles, Vec4Swizzles},
+    asset::{load_internal_asset, uuid_handle},
+    math::{Vec2Swizzles, Vec3Swizzles, Vec4Swizzles, vec2, vec3, vec4},
     prelude::*,
 };
 
@@ -28,8 +28,7 @@ impl Plugin for NoisyShaderPlugin {
     }
 }
 
-const NOISY_SHADER_HANDLE: Handle<Shader> =
-    Handle::weak_from_u128(224136012015454690045205738992444526155);
+const NOISY_SHADER_HANDLE: Handle<Shader> = uuid_handle!("9e85d206-7851-41d9-a04f-c4879ddd7143");
 
 fn permute_3(x: Vec3) -> Vec3 {
     (((x * 34.) + 1.) * x) % Vec3::splat(289.)
@@ -199,7 +198,7 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
     let h = 1. - x.abs() - y.abs();
 
     let b0 = vec4(x.x, x.y, y.x, y.y);
-    let b1 = vec4(x.w, x.w, y.z, y.w);
+    let b1 = vec4(x.z, x.w, y.z, y.w);
 
     let s0 = b0.floor() * 2. + 1.;
     let s1 = b1.floor() * 2. + 1.;
@@ -226,7 +225,7 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
     p3 *= norm.w;
 
     // mix final noise value
-    let mut m = 0.6
+    let mut m = 0.5
         - vec4(
             Vec3::dot(x0, x0),
             Vec3::dot(x1, x1),
@@ -235,7 +234,103 @@ pub fn simplex_noise_3d(v: Vec3) -> f32 {
         );
     m = Vec4::max(m, Vec4::ZERO);
     m *= m;
-    42. * Vec4::dot(
+    105. * Vec4::dot(
+        m * m,
+        vec4(
+            Vec3::dot(p0, x0),
+            Vec3::dot(p1, x1),
+            Vec3::dot(p2, x2),
+            Vec3::dot(p3, x3),
+        ),
+    )
+}
+
+// MIT License. © Ian McEwan, Stefan Gustavson, Munrocket, Johan Helsing
+/// Simplex noise in three dimensions
+pub fn simplex_noise_3d_seeded(v: Vec3, seed: Vec3) -> f32 {
+    const C: Vec2 = vec2(1. / 6., 1. / 3.);
+    const D: Vec4 = vec4(0., 0.5, 1., 2.);
+
+    // first corner
+    let mut i = (v + Vec3::dot(v, C.yyy())).floor();
+    let x0 = v - i + Vec3::dot(i, C.xxx());
+
+    // other corners
+    let g = step_3(x0.yzx(), x0.xyz());
+    let l = 1. - g;
+    let i1 = Vec3::min(g.xyz(), l.zxy());
+    let i2 = Vec3::max(g.xyz(), l.zxy());
+
+    // x0 = x0 - 0. + 0. * C
+    let x1 = x0 - i1 + 1. * C.xxx();
+    let x2 = x0 - i2 + 2. * C.xxx();
+    let x3 = x0 - 1. + 3. * C.xxx();
+
+    // permutations
+    i %= Vec3::splat(289.);
+    let seed = (seed + 0.5).floor();
+    let p = permute_4(
+        permute_4(
+            permute_4(i.z + vec4(0., i1.z, i2.z, 1.) + seed.z)
+                + i.y
+                + vec4(0., i1.y, i2.y, 1.)
+                + seed.y,
+        ) + i.x
+            + vec4(0., i1.x, i2.x, 1.)
+            + seed.x,
+    );
+
+    // gradients (NxN points uniformly over a square, mapped onto an octahedron)
+    let n_ = 1. / 7.; // N=7
+    let ns = n_ * D.wyz() - D.xzx();
+
+    let j = p - 49. * (p * ns.z * ns.z).floor(); // mod(p, N*N)
+
+    let x_ = (j * ns.z).floor();
+    let y_ = (j - 7. * x_).floor(); // mod(j, N)
+
+    let x = x_ * ns.x + ns.yyyy();
+    let y = y_ * ns.x + ns.yyyy();
+    let h = 1. - x.abs() - y.abs();
+
+    let b0 = vec4(x.x, x.y, y.x, y.y);
+    let b1 = vec4(x.z, x.w, y.z, y.w);
+
+    let s0 = b0.floor() * 2. + 1.;
+    let s1 = b1.floor() * 2. + 1.;
+    let sh = -step_4(h, Vec4::splat(0.));
+
+    let a0 = b0.xzyw() + s0.xzyw() * sh.xxyy();
+    let a1 = b1.xzyw() + s1.xzyw() * sh.zzww();
+
+    let mut p0 = a0.xy().extend(h.x);
+    let mut p1 = a0.zw().extend(h.y);
+    let mut p2 = a1.xy().extend(h.z);
+    let mut p3 = a1.zw().extend(h.w);
+
+    // normalize gradients
+    let norm = taylor_inv_sqrt_4(vec4(
+        Vec3::dot(p0, p0),
+        Vec3::dot(p1, p1),
+        Vec3::dot(p2, p2),
+        Vec3::dot(p3, p3),
+    ));
+    p0 *= norm.x;
+    p1 *= norm.y;
+    p2 *= norm.z;
+    p3 *= norm.w;
+
+    // mix final noise value
+    let mut m = 0.5
+        - vec4(
+            Vec3::dot(x0, x0),
+            Vec3::dot(x1, x1),
+            Vec3::dot(x2, x2),
+            Vec3::dot(x3, x3),
+        );
+    m = Vec4::max(m, Vec4::ZERO);
+    m *= m;
+    105. * Vec4::dot(
         m * m,
         vec4(
             Vec3::dot(p0, x0),
@@ -347,6 +442,27 @@ pub fn fbm_simplex_3d(pos: Vec3, octaves: usize, lacunarity: f32, gain: f32) -> 
     sum
 }
 
+/// Fractional brownian motion (fbm) based on seeded 3d simplex noise
+pub fn fbm_simplex_3d_seeded(
+    pos: Vec3,
+    octaves: usize,
+    lacunarity: f32,
+    gain: f32,
+    seed: Vec3,
+) -> f32 {
+    let mut sum = 0.;
+    let mut amplitude = 1.;
+    let mut frequency = 1.;
+
+    for _ in 0..octaves {
+        sum += simplex_noise_3d_seeded(pos * frequency, seed) * amplitude;
+        amplitude *= gain;
+        frequency *= lacunarity;
+    }
+
+    sum
+}
+
 /// Cellular noise
 pub fn worley_2d(pos: Vec2, jitter: f32) -> Vec2 {
     const K: f32 = 1.0 / 7.0;
@@ -441,6 +557,24 @@ mod test {
         values
     }
 
+    fn sample_3d_seeded_fn(f: fn(Vec3, Vec3) -> f32) -> Vec<f32> {
+        let mut values = Vec::new();
+        for seed in [Vec3::X, Vec3::Y, Vec3::Z] {
+            for x in -5..5 {
+                let x = x as f32 / 10.;
+                for y in -5..5 {
+                    let y = y as f32 / 10.;
+                    for z in -5..5 {
+                        let z = z as f32 / 10.;
+                        let v = f(vec3(x, y, z), seed);
+                        values.push(v);
+                    }
+                }
+            }
+        }
+        values
+    }
+
     #[test]
     fn simplex_2d_values_unchanged() {
         assert_debug_snapshot!(sample_2d_fn(simplex_noise_2d));
@@ -465,6 +599,11 @@ mod test {
     }
 
     #[test]
+    fn simplex_3d_seeded_values_unchanged() {
+        assert_debug_snapshot!(sample_3d_seeded_fn(simplex_noise_3d_seeded));
+    }
+
+    #[test]
     fn fbm_2d_values_unchanged() {
         assert_debug_snapshot!(sample_2d_fn(|p| { fbm_simplex_2d(p, 5, 2.0, 0.5) }));
     }
@@ -482,6 +621,13 @@ mod test {
     #[test]
     fn fbm_3d_values_unchanged() {
         assert_debug_snapshot!(sample_3d_fn(|p| { fbm_simplex_3d(p, 5, 2.0, 0.5) }));
+    }
+
+    #[test]
+    fn fbm_3d_seeded_values_unchanged() {
+        assert_debug_snapshot!(sample_3d_seeded_fn(|p, s| {
+            fbm_simplex_3d_seeded(p, 5, 2.0, 0.5, s)
+        }));
     }
 
     #[test]

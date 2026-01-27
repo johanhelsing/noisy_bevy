@@ -1,7 +1,8 @@
 use bevy::{
+    camera::ScalingMode,
     prelude::*,
-    render::{camera::ScalingMode, render_resource::AsBindGroup},
-    sprite::{Material2d, Material2dPlugin},
+    render::render_resource::AsBindGroup,
+    sprite_render::{Material2d, Material2dPlugin},
 };
 use noisy_bevy::NoisyShaderPlugin;
 
@@ -26,10 +27,10 @@ struct NoiseMaterial {
 }
 
 impl Material2d for NoiseMaterial {
-    fn vertex_shader() -> bevy::render::render_resource::ShaderRef {
+    fn vertex_shader() -> bevy::shader::ShaderRef {
         "examples/worley.wgsl".into()
     }
-    fn fragment_shader() -> bevy::render::render_resource::ShaderRef {
+    fn fragment_shader() -> bevy::shader::ShaderRef {
         "examples/worley.wgsl".into()
     }
 }
@@ -41,12 +42,12 @@ fn setup(
 ) {
     commands.spawn((
         Camera2d,
-        OrthographicProjection {
+        Projection::Orthographic(OrthographicProjection {
             scaling_mode: ScalingMode::FixedVertical {
                 viewport_height: 230.0,
             },
             ..OrthographicProjection::default_2d()
-        },
+        }),
     ));
 
     let material_handle = materials.add(NoiseMaterial {
