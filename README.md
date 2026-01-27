@@ -23,7 +23,8 @@ Simple stupid noise primitives for glam (`Vec2`, `Vec3`) and WGSL.
 - [`worley_2d`]
 
 ![screenshot of an asteroid generated on the gpu and cpu](https://s3.johanhelsing.studio/dump/noisy_asteroid.png)
-![domain_warping.png](./images/domain_warping.png)
+
+![domain_warping.webp](./images/domain_warping.webp)
 
 ## Usage
 
