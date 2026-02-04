@@ -17,3 +17,15 @@ cargo run --example worley_shader
 ```
 
 ![worley.png](../images/worley.png)
+
+## Domain warping
+
+A technique that distorts the position before feeding it to the noise, inspired by [Inigo Quilez](https://iquilezles.org/articles/warp).
+
+[domain_warping_shader.rs](/examples/domain_warping_shader.rs)
+
+![domain_warping](../images/domain_warping.webp)
+
+```sh
+cargo run --example domain_warping_shader
+```
