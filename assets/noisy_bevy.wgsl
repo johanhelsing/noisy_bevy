@@ -237,33 +237,37 @@ fn simplex_noise_3d_seeded(v: vec3<f32>, seed: vec3<f32>) -> f32 {
 // higher level concepts:
 
 /// Fractional brownian motion (fbm) based on 2d simplex noise
-fn fbm_simplex_2d(pos: vec2<f32>, octaves: i32, lacunarity: f32, gain: f32) -> f32 {
+fn fbm_simplex_2d(pos: vec2<f32>, octaves: i32, lacunarity: f32, gain: f32, normalize: bool) -> f32 {
     var sum = 0.;
     var amplitude = 1.;
+    var max_amplitude = 1.;
     var frequency = 1.;
 
     for (var i = 0; i < octaves; i+= 1) {
         sum += simplex_noise_2d(pos * frequency) * amplitude;
+        max_amplitude += amplitude;
         amplitude *= gain;
         frequency *= lacunarity;
     }
 
-    return sum;
+    return select(sum, 0.5 * sum / max_amplitude + 0.5, normalize);
 }
 
 /// Fractional brownian motion (fbm) based on seeded 2d simplex noise
-fn fbm_simplex_2d_seeded(pos: vec2<f32>, octaves: i32, lacunarity: f32, gain: f32, seed: f32) -> f32 {
+fn fbm_simplex_2d_seeded(pos: vec2<f32>, octaves: i32, lacunarity: f32, gain: f32, seed: f32, normalize: bool) -> f32 {
     var sum = 0.;
     var amplitude = 1.;
+    var max_amplitude = 1.;
     var frequency = 1.;
 
     for (var i = 0; i < octaves; i+= 1) {
         sum += simplex_noise_2d_seeded(pos * frequency, seed) * amplitude;
+        max_amplitude += amplitude;
         amplitude *= gain;
         frequency *= lacunarity;
     }
 
-    return sum;
+    return select(sum, 0.5 * sum / max_amplitude + 0.5, normalize);
 }
 
 const max_warp_iterations = 4; // Warping has diminishing returns due to the falloff param, so we don't need many iterations. Faloff makes it look more natural.
@@ -304,18 +308,20 @@ fn fbm_simplex_2d_warp_seeded(pos_initial: vec2<f32>, octaves: i32, lacunarity: 
 }
 
 /// Fractional brownian motion (fbm) based on 3d simplex noise
-fn fbm_simplex_3d(pos: vec3<f32>, octaves: i32, lacunarity: f32, gain: f32) -> f32 {
+fn fbm_simplex_3d(pos: vec3<f32>, octaves: i32, lacunarity: f32, gain: f32, normalize: bool) -> f32 {
     var sum = 0.;
     var amplitude = 1.;
+    var max_amplitude = 1.;
     var frequency = 1.;
 
     for (var i = 0; i < octaves; i+= 1) {
         sum += simplex_noise_3d(pos * frequency) * amplitude;
+        max_amplitude += amplitude;
         amplitude *= gain;
         frequency *= lacunarity;
     }
 
-    return sum;
+    return select(sum, 0.5 * sum / max_amplitude + 0.5, normalize);
 }
 
 /// Fractional brownian motion (fbm) based on seeded 3d simplex noise
