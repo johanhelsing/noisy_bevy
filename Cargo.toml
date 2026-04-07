@@ -10,7 +10,10 @@ repository = "https://github.com/johanhelsing/noisy_bevy"
 version = "0.13.0"
 
 [dependencies]
-bevy = { version = "0.18", default-features = false }
+bevy_asset = { version = "0.18", default-features = false, optional = true }
+bevy_shader = { version = "0.18", default-features = false, optional = true }
+bevy_app = { version = "0.18", default-features = false, optional = true }
+glam = { version = "0.30", default-features = false, features = ["bytemuck"], optional = true }
 
 [dev-dependencies]
 bevy = { version = "0.18", default-features = false, features = [
@@ -33,9 +36,12 @@ default = [
 ]
 
 gpu = [
-    "bevy/bevy_asset",
-    "bevy/bevy_shader",
+    "dep:bevy_app",
+    "dep:bevy_asset",
+    "dep:bevy_shader",
 ]
 
-cpu = []
+cpu = [
+    "dep:glam",
+]
 
