@@ -151,7 +151,7 @@ fn step_4(edge: Vec4, x: Vec4) -> Vec4 {
 
 #[inline]
 fn step_3(edge: Vec3, x: Vec3) -> Vec3 {
-    let b = Vec3::cmple(edge, x);
+    let b = bvec3(edge.x < x.x, edge.y <= x.y, edge.z <= x.z);
     Vec3::select(b, Vec3::ONE, Vec3::ZERO)
 }
 

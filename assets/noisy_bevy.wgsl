@@ -6,6 +6,11 @@ fn permute_3_(x: vec3<f32>) -> vec3<f32> {
     return (((x * 34.) + 1.) * x) % vec3(289.);
 }
 
+fn step_3(edge: vec3<f32>, x: vec3<f32>) -> vec3<f32> {
+    let b = vec3(edge.x < x.x, edge.y <= x.y, edge.z <= x.z);
+    return select(vec3(0.), vec3(1.), b);
+}
+
 fn simplex_noise_2d(v: vec2<f32>) -> f32 {
     let C = vec4(
         0.211324865405187, // (3.0 - sqrt(3.0)) / 6.0
@@ -104,7 +109,7 @@ fn simplex_noise_3d(v: vec3<f32>) -> f32 {
     let x0 = v - i + dot(i, C.xxx);
 
     // other corners
-    let g = step(x0.yzx, x0.xyz);
+    let g = step_3(x0.yzx, x0.xyz);
     let l = 1. - g;
     let i1 = min(g.xyz, l.zxy);
     let i2 = max(g.xyz, l.zxy);
@@ -173,7 +178,7 @@ fn simplex_noise_3d_seeded(v: vec3<f32>, seed: vec3<f32>) -> f32 {
     let x0 = v - i + dot(i, C.xxx);
 
     // other corners
-    let g = step(x0.yzx, x0.xyz);
+    let g = step_3(x0.yzx, x0.xyz);
     let l = 1. - g;
     let i1 = min(g.xyz, l.zxy);
     let i2 = max(g.xyz, l.zxy);
@@ -288,7 +293,7 @@ fn fbm_simplex_2d_warp_seeded(pos_initial: vec2<f32>, octaves: i32, lacunarity: 
     for (var i: i32 = 0; i < iterations; i++) {
         pos.x += scale * warp_scale.x * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
         pos.y += scale * warp_scale.y * fbm_simplex_2d_seeded(pos, octaves, lacunarity, gain, seed);
-        
+
         // Store positions in reverse order for easier user access (last iteration at index 0)
         let index = max_warp_iterations - 1 - i;
         if (index < max_warp_iterations) {
