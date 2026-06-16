@@ -1,4 +1,4 @@
-use bevy::math::{Vec2, Vec2Swizzles, Vec3, Vec3Swizzles, Vec4, Vec4Swizzles, vec2, vec3, vec4};
+use glam::{Vec2, Vec2Swizzles, Vec3, Vec3Swizzles, Vec4, Vec4Swizzles, vec2, vec3, vec4};
 
 fn permute_3(x: Vec3) -> Vec3 {
     (((x * 34.) + 1.) * x) % Vec3::splat(289.)

@@ -1,8 +1,6 @@
-use bevy::{
-    app::{ Plugin, App },
-    asset::{ Handle, load_internal_asset, uuid_handle },
-    shader::{ Shader },
-};
+use bevy_app::{ Plugin, App };
+use bevy_asset::{ Handle, load_internal_asset, uuid_handle };
+use bevy_shader::{ Shader };
 
 /// Adds noise library as a wgsl import
 ///
