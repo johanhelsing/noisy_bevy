@@ -1,5 +1,5 @@
 ---
-source: src/lib.rs
+source: src/cpu.rs
 expression: "sample_2d_fn(|p| { fbm_simplex_2d(p, 5, 2.0, 0.5) })"
 ---
 [

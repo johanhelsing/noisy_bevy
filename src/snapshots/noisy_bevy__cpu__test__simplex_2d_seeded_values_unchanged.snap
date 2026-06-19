@@ -1,5 +1,5 @@
 ---
-source: src/lib.rs
+source: src/cpu.rs
 expression: "sample_2d_fn(|p| simplex_noise_2d_seeded(p, 0.0))"
 ---
 [

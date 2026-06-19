@@ -1,6 +1,5 @@
 ---
-source: src/lib.rs
-assertion_line: 436
+source: src/cpu.rs
 expression: "{\n    let mut values = Vec::new(); for x in -20..20\n    {\n        let x = x as f32 / 10.; for y in -20..20\n        {\n            let y = y as f32 / 10.; let v = worley_2d(vec2(x, y), 1.0);\n            values.push(v);\n        }\n    } values\n}"
 ---
 [

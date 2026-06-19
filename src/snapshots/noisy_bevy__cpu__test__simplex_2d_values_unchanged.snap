@@ -1,6 +1,6 @@
 ---
-source: src/lib.rs
-expression: values
+source: src/cpu.rs
+expression: sample_2d_fn(simplex_noise_2d)
 ---
 [
     0.0024872867,
