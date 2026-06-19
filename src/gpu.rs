@@ -1,7 +1,7 @@
 use bevy::{
-    app::{ Plugin, App },
-    asset::{ Handle, load_internal_asset, uuid_handle },
-    shader::{ Shader },
+    app::{App, Plugin},
+    asset::{Handle, load_internal_asset, uuid_handle},
+    shader::Shader,
 };
 
 /// Adds noise library as a wgsl import
@@ -26,4 +26,3 @@ impl Plugin for NoisyShaderPlugin {
 }
 
 const NOISY_SHADER_HANDLE: Handle<Shader> = uuid_handle!("9e85d206-7851-41d9-a04f-c4879ddd7143");
-
