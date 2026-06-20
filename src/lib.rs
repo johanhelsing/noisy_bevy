@@ -12,4 +12,3 @@ mod cpu;
 
 #[cfg(feature = "cpu")]
 pub use cpu::*;
-
