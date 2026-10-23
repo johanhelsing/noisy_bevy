@@ -1,9 +1,9 @@
-#import bevy_sprite::mesh2d_view_bindings::globals
-#import bevy_sprite::mesh2d_functions::{
+import bevy_sprite_render::mesh2d::view_bindings::globals;
+import bevy_sprite_render::mesh2d::functions::{
     get_world_from_local,
     mesh2d_position_local_to_clip,
-}
-#import noisy_bevy::fbm_simplex_2d_warp_seeded
+};
+import noisy_bevy::fbm_simplex_2d_warp_seeded;
 
 struct NoiseMaterial {
     num_warps: i32

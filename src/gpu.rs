@@ -8,19 +8,19 @@ use bevy::{
 ///
 /// General functionality can be imported through:
 ///
-/// ```wgsl
-/// #import noisy_bevy
+/// ```wesl
+/// import noisy_bevy::simplex_noise_2d;
 /// ```
 pub struct NoisyShaderPlugin;
 
 impl Plugin for NoisyShaderPlugin {
     fn build(&self, app: &mut App) {
-        // workaround: embedded_asset is broken in bevy 0.12.0
+        // not using embedded_asset, since it would make the import path noisy_bevy::<file>
         load_internal_asset!(
             app,
             NOISY_SHADER_HANDLE,
-            "../assets/noisy_bevy.wgsl",
-            Shader::from_wgsl
+            "../assets/noisy_bevy.wesl",
+            |source, _path| Shader::from_wesl(source, "embedded://noisy_bevy.wesl")
         );
     }
 }

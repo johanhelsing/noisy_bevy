@@ -48,10 +48,10 @@ struct AsteroidBackgroundMaterial {
 
 impl Material2d for AsteroidBackgroundMaterial {
     fn vertex_shader() -> bevy::shader::ShaderRef {
-        "examples/asteroid_background.wgsl".into()
+        "examples/asteroid_background.wesl".into()
     }
     fn fragment_shader() -> bevy::shader::ShaderRef {
-        "examples/asteroid_background.wgsl".into()
+        "examples/asteroid_background.wesl".into()
     }
 }
 
