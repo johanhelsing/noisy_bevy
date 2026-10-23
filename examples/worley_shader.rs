@@ -28,10 +28,10 @@ struct NoiseMaterial {
 
 impl Material2d for NoiseMaterial {
     fn vertex_shader() -> bevy::shader::ShaderRef {
-        "examples/worley.wgsl".into()
+        "examples/worley.wesl".into()
     }
     fn fragment_shader() -> bevy::shader::ShaderRef {
-        "examples/worley.wgsl".into()
+        "examples/worley.wesl".into()
     }
 }
 

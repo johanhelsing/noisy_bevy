@@ -1,8 +1,8 @@
-#import noisy_bevy::fbm_simplex_2d_seeded
-#import bevy_sprite::mesh2d_functions::{
+import noisy_bevy::fbm_simplex_2d_seeded;
+import bevy_sprite_render::mesh2d::functions::{
     get_world_from_local,
     mesh2d_position_local_to_clip,
-}
+};
 
 struct AsteroidMaterial {
     params: vec4<f32>

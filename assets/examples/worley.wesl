@@ -1,8 +1,8 @@
-#import bevy_sprite::mesh2d_functions::{
+import bevy_sprite_render::mesh2d::functions::{
     get_world_from_local,
     mesh2d_position_local_to_clip,
-}
-#import noisy_bevy::worley_2d
+};
+import noisy_bevy::worley_2d;
 
 struct NoiseMaterial {
     frequency_scale: f32,
